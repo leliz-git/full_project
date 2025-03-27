@@ -1,0 +1,107 @@
+const Apartment = require("../models/Apartments")
+
+const createNewApartment = async (req, res) => {
+    // if(req.broker_bool===true)//אם הדירה טופלה
+    //     apartment.broker_bool=true
+    const { number_of_interested, seller_id, images, monopolism, neighborhood, number_of_rooms, floor, price, yad2, description } = req.body
+    if (!neighborhood) {
+        return res.status(400).json({ message: 'neighborhood is required' })
+    }
+    if (!number_of_rooms) {
+        return res.status(400).json({ message: 'number_of_rooms is required' })
+    }
+    if (!price) {
+        return res.status(400).json({ message: 'price is required' })
+    }
+    // if (!yad2) {
+    //     return res.status(400).json({ message: 'yad2 is required' })
+    // }
+    const apartment = await Apartment.create({ number_of_interested, seller_id, images, monopolism, neighborhood, number_of_rooms, floor, price, yad2, description })
+    const apartments = await Apartment.find().lean()
+    res.json(apartments)
+}
+
+const getAllApartmentByBroker = async (req, res) => {
+    
+    // const apartments = await Apartment.find(broker_bool===true).lean()//יש פה בעיה
+    const apartments = await Apartment.find({ broker_bool: true }).lean();
+    if (!apartments?.length)
+        return res.status(400).json({ message: 'No apartments found' })
+    res.json(apartments)
+
+}//כדי שיראה את זה באיזור האישי שלו
+
+const getAllApartment = async (req, res) => {
+    const apartments = await Apartment.find().lean()
+    if (!apartments?.length)
+        return res.status(400).json({ message: 'No apartments found' })
+    res.json(apartments)
+
+}//שכל מי שנכנס לאתר יראה
+
+
+const updateApartment = async (req, res) => {
+    const { _id, monopolism, neighborhood, number_of_rooms, floor, price, yad2, description, images, broker_bool, bought } = req.body
+
+    if (!_id) {
+        return res.status(400).json({ message: 'id is required' })
+    }
+    const apartment = await Apartment.findById(_id).exec()
+
+    if (!apartment) {
+        return res.status(400).json({ message: 'apartment not found' })
+    }
+
+    apartment.monopolism = monopolism
+    apartment.neighborhood = neighborhood
+    apartment.number_of_rooms = number_of_rooms
+    apartment.floor = floor
+    apartment.price = price
+    apartment.yad2 = yad2
+    apartment.description = description
+    apartment.images = images
+    apartment.broker_bool = broker_bool
+    apartment.bought = bought
+    const updateApartment = await apartment.save()
+    const apartments = await Apartment.find().lean()
+    res.json(apartments)
+}
+
+const updateNumofIntrest = async (req, res) => {
+    // getApartmentById()
+    const { _id } = req.params
+
+    const apartment = await Apartment.findById(_id).lean()
+
+    if (!apartment) {
+        return res.status(400).json({ message: 'No apartment found' })
+    }
+
+    apartment.number_of_interested = apartment.number_of_interested + 1
+}
+
+const deleteApartment = async (req, res) => {
+    const { _id } = req.body
+    // const { id } = req.params
+    const apartment = await Apartment.findById(_id).exec()
+    if (!apartment) {
+        return res.status(400).json({ message: 'Apartment not found' })
+    }
+    const result = await apartment.deleteOne()
+    const apartments = await Apartment.find().lean()
+    res.json(apartments)
+}
+
+const getApartmentById = async (req, res) => {//לבדוק אם צריך middleware
+    const { id } = req.params
+console.log(id);
+    const apartment = await Apartment.findById(id).lean()
+
+    if (!apartment) {
+        return res.status(400).json({ message: 'No apartment found' })
+    }
+    res.json(apartment)
+}
+
+module.exports = { createNewApartment, getAllApartment, updateApartment, updateNumofIntrest, deleteApartment, getApartmentById, getAllApartmentByBroker }
+

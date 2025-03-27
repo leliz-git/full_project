@@ -1,0 +1,50 @@
+.form-demo .card {
+    min-width: 450px;
+}
+.form-demo .card form {
+    margin-top: 2rem;
+    width:20%;
+    height:20%;
+}
+.form-demo .card .field {
+    margin-bottom: 1.5rem;
+}
+
+
+.form-demo .mt-2{
+    background-color: rgb(54, 54, 218); /* צבע הרקע של הכפתור */
+    color: white; /* צבע הטקסט */
+    border: none; /* ללא גבול */
+    padding: 10px 20px; /* רווח פנימי */
+    font-size: 12px; /* גודל הפונט */
+    cursor: pointer; /* מצביע על לחיצה */
+    border-radius: 5px; /* פינות מעוגלות */
+    transition: background-color 0.3s; /* אנימציה בזמן שינוי צבע */
+    width: 73%; /* רוחב קבוע */
+    height:10%; /* גובה קבוע */
+}
+.form-demo .reset1{
+    background-color:rgb(54, 54, 218); /* צבע הרקע של הכפתור */
+    color: white; /* צבע הטקסט */
+    border: none; /* ללא גבול */
+    padding: 10px 20px; /* רווח פנימי */
+    font-size: 12px; /* גודל הפונט */
+    cursor: pointer; /* מצביע על לחיצה */
+    border-radius: 5px; /* פינות מעוגלות */
+    transition: background-color 0.3s; /* אנימציה בזמן שינוי צבע */
+    width: 10%; /* רוחב קבוע */
+    height: 10px; /* גובה קבוע */
+    margin-right: 5%
+}
+
+@media screen and (max-width: 960px) {
+    .form-demo .card {
+        width: 80%;
+    }
+}
+@media screen and (max-width: 640px) {
+    .form-demo .card {
+        width: 100%;
+        min-width: 0;
+    }
+}
