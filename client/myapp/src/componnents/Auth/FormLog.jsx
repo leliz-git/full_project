@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setToken, logOut } from '../../redux/tokenSlice'
 import { Toast } from 'primereact/toast';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
         
 
@@ -27,6 +28,7 @@ const FormLog = (props) => {
     const [formData, setFormData] = useState({});
     const[user,setUser]=useState("");
     const dispatch = useDispatch();
+    const navigate = useNavigate()
     const toastTopCenter = useRef(null);
 
     const showMessage1 = (event, ref, severity) => {
@@ -71,14 +73,16 @@ debugger
                 setShowMessage(true);
                 console.log(res);
                 setUser(res.data.user);  
-                alert('Hi User')
+                // alert('Hi User')
+                const userId=res.data.user._id//////
+                navigate(`/login/${userId}`)///////
             }
             else{
                 
             }
         } catch (e) {
             <Alert></Alert>
-            alert("fg")
+            alert("Unauthorized")
             console.error(e)
             
         }
@@ -100,7 +104,7 @@ debugger
         
         
         <div className="form-demo">
-            <Dialog visible={showMessage} onHide={() => setShowMessage(false)} position="top" footer={dialogFooter} showHeader={false} breakpoints={{ '960px': '80vw' }} style={{ height:'13vw',width: '20vw'}} >
+            {/* <Dialog visible={showMessage} onHide={() => setShowMessage(false)} position="top" footer={dialogFooter} showHeader={false} breakpoints={{ '960px': '80vw' }} style={{ height:'13vw',width: '20vw'}} >
                 <div className="flex justify-content-center flex-column pt-6 px-3">
                     <i className="pi pi-check-circle" style={{ fontSize: '2rem', color: 'var(--green-500)' }}></i>
                     <h5>Sign in </h5>
@@ -110,7 +114,7 @@ debugger
                     </p>
                 </div>
                 
-            </Dialog>
+            </Dialog> */}
 
             <Dialog visible={props.visible} style={{  height: '20vw', width: '20vw', margin: '0', marginTop:'0', padding: '0'}} onHide={() => { if (!props.visible) return; props.setVisible(false);  }}>
             <div className="flex justify-content-center" >

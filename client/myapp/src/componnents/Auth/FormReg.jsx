@@ -11,6 +11,7 @@ import { Dialog } from 'primereact/dialog';
 import { Divider } from 'primereact/divider';
 import { classNames } from 'primereact/utils';
 import './Form.css';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -18,7 +19,7 @@ const FormReg = (props) => {
 
     const [showMessage, setShowMessage] = useState(false);
     const [formData, setFormData] = useState({});
-
+    const navigate = useNavigate()
 
     const [defaultValues, setDefaultValues] = useState({
         name: '',
@@ -58,6 +59,9 @@ const FormReg = (props) => {
                 setFormData(data);
                 setShowMessage(true);
                 console.log(res);
+                const userId=res.data.user._id//////
+                const name=res.data.name/////
+                navigate(`/register/${userId}/${name}`)/////
                 // alert("Hi user")
 
             }
@@ -87,7 +91,7 @@ const FormReg = (props) => {
 
 
         <div className="form-demo">
-            <Dialog visible={showMessage} onHide={() => setShowMessage(false)} position="top" footer={dialogFooter} 
+            {/* <Dialog visible={showMessage} onHide={() => setShowMessage(false)} position="top" footer={dialogFooter} 
             showHeader={false} breakpoints={{ '960px': '80vw' }} style={{ width: '30vw' }}>
                 <div className="flex justify-content-center flex-column pt-6 px-3">
                     <i className="pi pi-check-circle" style={{ fontSize: '5rem', color: 'var(--green-500)' }}></i>
@@ -97,7 +101,7 @@ const FormReg = (props) => {
                         <b>{formData.name}</b> ;
                     </p>
                 </div>
-            </Dialog>
+            </Dialog> */}
 
             <Dialog visible={props.visible1} style={{ width: '28vw', margin: '0', marginTop: '0', padding: '0' }} 
             onHide={() => { if (!props.visible1) return; props.setVisible1(false); }}>
