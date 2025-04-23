@@ -19,6 +19,7 @@ import Rec_AddApartment from './componnents/Recourses/Rec_AddApartment';
 const LazyAuth = React.lazy(() => import('./componnents/Auth/Auth'))
 const LazyFormDemo = React.lazy(() => import('./componnents/Auth/FormReg'))
 const LazyRecourse = React.lazy(() => import('./componnents/Recourses/Rec_AddApartment'))
+const LazyB_Recourse = React.lazy(() => import('./componnents/Broker/B_Recourses'))
 
 function App() {
  
@@ -35,6 +36,7 @@ function App() {
       <Route path='/' element={<Suspense fallback="loading..."><LazyAuth /></Suspense>} />
       <Route path='/Register' element={<Suspense fallback="loading..."><LazyFormDemo /></Suspense>} />
       <Route path='/Recourse' element={<Suspense fallback="loading..."><LazyRecourse /></Suspense>} />
+      <Route path='/Personal' element={<Suspense fallback="loading..."><LazyB_Recourse /></Suspense>} />
       
     </Routes>
     </div>

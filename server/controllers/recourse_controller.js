@@ -53,7 +53,7 @@ const updateRecourse = async (req,res)=>{
         return res.status(400).json({ message: 'recourse not found' })
     }
     recourse.contact=contact
-    recourse.complete=complete
+    recourse.complete=!recourse.complete
 
     const updateRecourse = await recourse.save()
     const recourses = await Recourse.find().lean()

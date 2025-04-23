@@ -94,7 +94,7 @@ const Rec_AddApartment = (props) => {
     const { control, formState: { errors }, handleSubmit, reset } = useForm({ defaultValues });
 
     const onSubmit = async (data) => {
-debugger
+// debugger
         try {
 
             console.log(data);
@@ -118,8 +118,8 @@ debugger
                 } 
             )
         
-            if (res.status === 201) {
-                alert("Hi user")
+            if (res.status === 200) {
+                // alert("Hi user")
                 setFormData(data);
                 setShowMessage(true);
                 console.log(res);
@@ -140,7 +140,7 @@ debugger
     };
 
     const dialogFooter = <div className="flex justify-content-center"><Button label="OK" className="p-button-text"
-        autoFocus onClick={() => { setShowMessage(false); props.setVisible(false) }} /></div>;
+        autoFocus onClick={() => { setShowMessage(false); props.setVisible2(false) }} /></div>;
 
 
 
@@ -165,6 +165,7 @@ debugger
 
             <Dialog visible={props.visible2} style={{ width: '28vw' }}
                 onHide={() => { if (!props.visible2) return; props.setVisible2(false); }}>
+                   
 
                 <div className="flex justify-content-center">
                     <div className="card">
