@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { classNames } from 'primereact/utils';
 import { DataTable } from 'primereact/datatable';
@@ -18,10 +17,13 @@ import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
 import { Tag } from 'primereact/tag';
 import Rec_AddApartment from '../Recourses/Rec_AddApartment';
+import Rec_UpdateApartment from '../Recourses/Rec_UpdateApartment';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
+
 const GalleryApartment = () => {
     let emptyApartment = {
+        _id:null,
         id: null,
         neighborhood: '',
         image: null,
@@ -37,6 +39,7 @@ const GalleryApartment = () => {
     const [apartments, setApartments] = useState([]);
     const [loading, setLoading] = useState(true);
     const [ApartmentDialog, setApartmentDialog] = useState(false);
+    const [ApartmentDialog1, setApartmentDialog1] = useState(false);
     const [deleteApartmentDialog, setDeleteApartmentDialog] = useState(false);
     const [deleteApartmentsDialog, setDeleteApartmentsDialog] = useState(false);
     const [apartment, setApartment] = useState(emptyApartment);
@@ -54,7 +57,7 @@ const GalleryApartment = () => {
             try {
                 const response = await axios({
                     method: 'GET',
-                    url: 'http://localhost:7002/api/apartments/getAllApartments',
+                    url: 'http://localhost:7002/api/apartments/getAllApartmentsByBroker',
                     headers: { Authorization: "Bearer " + accesstoken },
                 });
 
@@ -71,7 +74,7 @@ const GalleryApartment = () => {
 
 
     const formatCurrency = (value) => {
-        return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+        return value.toLocaleString('en-US', { style: 'currency', currency: 'ILS' });
     };
 
     const openNew = () => {
@@ -83,6 +86,10 @@ const GalleryApartment = () => {
     const hideDialog = () => {
         setSubmitted(false);
         setApartmentDialog(false);
+    };
+    const hideDialog1 = () => {
+        setSubmitted(false);
+        setApartmentDialog1(false);
     };
 
     const hideDeleteApartmentDialog = () => {
@@ -119,8 +126,9 @@ const GalleryApartment = () => {
     };
 
     const editApartment = (Apartment) => {
+        
         setApartment({ ...Apartment });
-        setApartmentDialog(true);
+        setApartmentDialog1(true);
     };
 
     const confirmDeleteApartment = (Apartment) => {
@@ -217,9 +225,9 @@ const GalleryApartment = () => {
     };
 
     const imageBodyTemplate = (rowData) => {
-        return <img src={`https://primefaces.org/cdn/primereact/images/Apartment/${rowData.image}`} alt={rowData.image} className="shadow-2 border-round" style={{ width: '64px' }} />;
+        return <img src={`${rowData.image}`} alt={rowData.image} className="shadow-2 border-round" style={{ width: '64px' }} />;
     };
-
+// src={`https://primefaces.org/cdn/primereact/images/Apartment/${rowData.image}`}
     const priceBodyTemplate = (rowData) => {
         return formatCurrency(rowData.price);
     };
@@ -259,7 +267,7 @@ const GalleryApartment = () => {
 
     const header = (
         <div className="flex flex-wrap gap-2 align-items-center justify-content-between">
-            <h4 className="m-0">Manage Apartments</h4>
+            <h4 className="m-0"></h4>
             <IconField iconPosition="left">
                 <InputIcon className="pi pi-search" />
                 <InputText type="search" onInput={(e) => setGlobalFilter(e.target.value)} placeholder="Search..." />
@@ -295,20 +303,22 @@ const GalleryApartment = () => {
                     paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} Apartments" globalFilter={globalFilter} header={header}>
                     <Column selectionMode="multiple" exportable={false}></Column>
-                    <Column field="price" header="price" sortable style={{ minWidth: '12rem' }}></Column>
-                    <Column field="neighbrhood" header="neighbrhood" sortable style={{ minWidth: '16rem' }}></Column>
+                    <Column field="price" header="price" body={priceBodyTemplate} ></Column>
+                    <Column field="neighborhood" header="neighborhood" ></Column>
                     <Column field="image" header="Image" body={imageBodyTemplate}></Column>
-                    <Column field="number of rooms" header="number of rooms" body={priceBodyTemplate} sortable style={{ minWidth: '8rem' }}></Column>
-                    <Column field="floor" header="floor" sortable style={{ minWidth: '10rem' }}></Column>
-                    <Column field="number of interest" header="Reviews" sortable style={{ minWidth: '12rem' }}></Column>
-                    <Column field="inventoryStatus" header="Status" sortable style={{ minWidth: '12rem' }}></Column>
+                    <Column field="number_of_rooms" header="number of rooms"  ></Column>
+                    <Column field="floor" header="floor" ></Column>
+                    <Column field="number_of_interested" header="number of interests" ></Column>
+                    <Column field="description" header="description" ></Column>
+                    <Column field="_id" header="_id" ></Column>
+                    {/* <Column field="inventoryStatus" header="Status" sortable style={{ minWidth: '12rem' }}></Column> */}
                     <Column body={actionBodyTemplate} exportable={false} style={{ minWidth: '12rem' }}></Column>
                 </DataTable>
             </div>
 
            
 
-            <Dialog visible={deleteApartmentDialog} style={{ width: '32rem' }} breakpoints={{ '960px': '75vw', '641px': '90vw' }} header="Confirm" modal footer={deleteApartmentDialogFooter} onHide={hideDeleteApartmentDialog}>
+            {/* <Dialog visible={deleteApartmentDialog} style={{ width: '32rem' }} breakpoints={{ '960px': '75vw', '641px': '90vw' }} header="Confirm" modal footer={deleteApartmentDialogFooter} onHide={hideDeleteApartmentDialog}>
                 <div className="confirmation-content">
                     <i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: '2rem' }} />
                     {apartment && (
@@ -317,16 +327,17 @@ const GalleryApartment = () => {
                         </span>
                     )}
                 </div>
-            </Dialog>
+            </Dialog> */}
 
-            {ApartmentDialog?<Rec_AddApartment setApartments={setApartments} setVisible={setApartmentDialog}  hideDialog={hideDialog} visible={ApartmentDialog}></Rec_AddApartment>:<></>}
-            
-            <Dialog visible={deleteApartmentsDialog} style={{ width: '32rem' }} breakpoints={{ '960px': '75vw', '641px': '90vw' }} header="Confirm" modal footer={deleteApartmentsDialogFooter} onHide={hideDeleteApartmentsDialog}>
+            {ApartmentDialog?<Rec_AddApartment setApartments={setApartments} setVisible={setApartmentDialog}  onHide={hideDialog} visible={ApartmentDialog}></Rec_AddApartment>:<></>}
+            {ApartmentDialog1?<Rec_UpdateApartment apartment={apartment} setApartments={setApartments} setVisible={setApartmentDialog1}  onHide={hideDialog1} visible={ApartmentDialog1}></Rec_UpdateApartment>:<></>}
+
+            {/* <Dialog visible={deleteApartmentsDialog} style={{ width: '32rem' }} breakpoints={{ '960px': '75vw', '641px': '90vw' }} header="Confirm" modal footer={deleteApartmentsDialogFooter} onHide={hideDeleteApartmentsDialog}>
                 <div className="confirmation-content">
                     <i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: '2rem' }} />
                     {apartment && <span>Are you sure you want to delete the selected Apartments?</span>}
                 </div>
-            </Dialog>
+            </Dialog> */}
         </div>
     );
 

@@ -16,13 +16,13 @@ import Auth from './componnents/Auth/Auth';
 import FormReg from './componnents/Auth/FormReg';
 import Alert from './componnents/Auth/Alert'
 import Rec_AddApartment from './componnents/Recourses/Rec_AddApartment';
-import GalleryApartment from './componnents/Apartments/GalleryApartment';
+import GalleryApartment from './componnents/Broker/GalleryApartment';
 const LazyAuth = React.lazy(() => import('./componnents/Auth/Auth'))
 const LazyFormDemo = React.lazy(() => import('./componnents/Auth/FormReg'))
 const LazyFormLog = React.lazy(() => import('./componnents/Auth/FormLog'))
 const LazyRecourse = React.lazy(() => import('./componnents/Recourses/Rec_AddApartment'))
 const LazyB_Recourse = React.lazy(() => import('./componnents/Broker/B_Recourses'))
-const LazyApartments = React.lazy(() => import('./componnents/Apartments/ApartmentGallery'))
+const LazyApartments = React.lazy(() => import('./componnents/Broker/GalleryApartment'))
 
 
 function App() {

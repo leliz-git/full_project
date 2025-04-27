@@ -24,10 +24,6 @@ import 'primereact/resources/themes/lara-light-indigo/theme.css';
 import 'primereact/resources/primereact.min.css';
 
 
-
-
-
-
 const Rec_AddApartment = (props) => {
     const [visible, setVisible] = useState(false);
     const [imagePreview, setImagePreview] = useState(null);  // למעקב אחרי התמונה שהועלתה
@@ -64,30 +60,7 @@ const Rec_AddApartment = (props) => {
     useEffect(() => {
     }, []);
 
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         try {
-    //             const response = await axios.get('https://data.gov.il/api/action/datastore_search', {
-    //                 params: {
-    //                     resource_id: 'b7cf8f14-64a2-4b33-8d4b-edb286fdbd37',
-    //                     limit: 1500
-    //                 }
-    //             });
-    //             if (response.data.result && response.data.result.records) {
-    //                 setData(response.data.result.records);
-    //             } else {
-    //                 setError('No records found');
-    //             }
-    //         } catch (error) {
-    //             setError('There was an error making the request');
-    //             console.error(error);
-    //         }
-    //     };
-
-    //     fetchData();
-    // }, []); // ריק [] משמעותו להריץ את הפונקציה בפעם אחת בעת ההתקנה
-
-    // const neighborhoods= data.result.records.map(item => console.log(item));
+   
     console.log(data.values)
 
     const [defaultValues, setDefaultValues] = useState({
@@ -131,9 +104,9 @@ const Rec_AddApartment = (props) => {
 
             if (res.status === 200) {
                 // alert("Hi user")
-                 // alert("Hi user")
-                 props.setApartments(res.data);
-                 setShowMessage(true)
+                // alert("Hi user")
+                props.setApartments(res.data);
+                setShowMessage(true)
                 //  props.setVisible(false);
             }
 
@@ -204,7 +177,7 @@ const Rec_AddApartment = (props) => {
 
 
             <Dialog visible={visible} onHide={() => props.onHide()} style={{ width: '28vw', margin: '0', marginTop: '0', padding: '0' }}
-               >
+            >
 
 
                 <div className="flex justify-content-center">
@@ -312,7 +285,7 @@ const Rec_AddApartment = (props) => {
 
                                     // onUpload={onUpload}
                                     auto
-                                    chooseLabel="Browse"
+                                    chooseLabel="image"
                                 />
 
                                 {/* תצוגה מקדימה של התמונה אם נבחרה */}
@@ -328,7 +301,7 @@ const Rec_AddApartment = (props) => {
                                 )}
                             </div>
 
-
+                            <br></br>
 
 
 
@@ -351,7 +324,7 @@ const Rec_AddApartment = (props) => {
                             <br></br>
                             <Button type="button" label="reset" onClick={() => (reset())} className='reset1'></Button>
                             <Button type="submit" label="send" className="mt-2"
-                                 
+
                             />
 
                         </form>

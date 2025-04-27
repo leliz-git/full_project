@@ -24,7 +24,7 @@ const createNewApartment = async (req, res) => {
 const getAllApartmentByBroker = async (req, res) => {
     
     // const apartments = await Apartment.find(broker_bool===true).lean()//יש פה בעיה
-    const apartments = await Apartment.find({ broker_bool: true }).lean();
+    const apartments = await Apartment.find({ 'broker_bool': false }).lean();
     if (!apartments?.length)
         return res.status(400).json({ message: 'No apartments found' })
     res.json(apartments)
@@ -32,7 +32,7 @@ const getAllApartmentByBroker = async (req, res) => {
 }//כדי שיראה את זה באיזור האישי שלו
 
 const getAllApartment = async (req, res) => {
-    const apartments = await Apartment.find().lean()
+    const apartments = await Apartment.find({'broker_bool': true}).lean()
     if (!apartments?.length)
         return res.status(400).json({ message: 'No apartments found' })
     res.json(apartments)
@@ -41,14 +41,17 @@ const getAllApartment = async (req, res) => {
 
 
 const updateApartment = async (req, res) => {
-    const { _id, monopolism, neighborhood, number_of_rooms, floor, price, yad2, description, images, broker_bool, bought } = req.body
+    // const { _id } = req.params
+    const {_id, monopolism, neighborhood, number_of_rooms, floor, price, yad2, description, images, broker_bool, bought } = req.body
 
     if (!_id) {
+        // console.log("!")
         return res.status(400).json({ message: 'id is required' })
     }
     const apartment = await Apartment.findById(_id).exec()
 
     if (!apartment) {
+        // console.log("?")
         return res.status(400).json({ message: 'apartment not found' })
     }
 

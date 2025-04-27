@@ -77,7 +77,15 @@ const FormLog = (props) => {
                 // alert('Hi User')
                 const userId=res.data.user._id//////
                 // navigate(`/Apartments/${userId}`)///////
-                navigate(`/Apartments`)///////
+                if(res.data.user.roles==="Broker")
+                {
+                    navigate(`/Apartments`)///////
+                }
+                else if(res.data.user.roles==="Buyer" || res.data.user.roles==="Seller")
+                {
+                    // alert("Hi user")
+                    setVisible(false)
+                }
             }
             else{
                 
