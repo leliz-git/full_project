@@ -23,6 +23,7 @@ import { useNavigate } from 'react-router-dom';
 
 const FormLog = (props) => {
     const accesstoken=useSelector((state)=>state.token.token)
+    const [visible,setVisible]= useState(true);
 
     const [showMessage, setShowMessage] = useState(false);
     const [formData, setFormData] = useState({});
@@ -99,7 +100,9 @@ const FormLog = (props) => {
 
     const dialogFooter = <div className="flex justify-content-center"><Button label="OK" className="p-button-text" autoFocus onClick={() => {setShowMessage(false);props.setVisible(false)}} /></div>;
 
-
+useEffect(()=>{
+    setVisible(true)
+},[])
 
     return (
         
@@ -117,7 +120,7 @@ const FormLog = (props) => {
                 
             </Dialog> */}
 
-            <Dialog visible={props.visible} style={{  height: '20vw', width: '20vw', margin: '0', marginTop:'0', padding: '0'}} onHide={() => { if (!props.visible) return; props.setVisible(false);  }}>
+            <Dialog header="Header" visible={visible} style={{  height: '20vw', width: '20vw', margin: '0', marginTop:'0', padding: '0'}} onHide={() => {if (!visible) return; setVisible(false); }}>
             <div className="flex justify-content-center" >
                 <div className="card" style={{ padding: '0', margin: '0' }} >
               

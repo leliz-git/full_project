@@ -16,7 +16,7 @@ import { useNavigate } from 'react-router-dom';
 
 
 const FormReg = (props) => {
-
+    const [visible,setVisible]= useState(true);
     const [showMessage, setShowMessage] = useState(false);
     const [formData, setFormData] = useState({});
     const navigate = useNavigate()
@@ -106,8 +106,8 @@ const FormReg = (props) => {
                 </div>
             </Dialog> }
 
-            <Dialog visible={props.visible1} style={{ width: '28vw', margin: '0', marginTop: '0', padding: '0' }} 
-            onHide={() => { if (!props.visible1) return; props.setVisible1(false); }}>
+            <Dialog visible={visible} style={{ width: '28vw', margin: '0', marginTop: '0', padding: '0' }} 
+            onHide={() => { if (!visible) return; setVisible(false);   }}>
                 <div className="flex justify-content-center" style={{ padding: '0', margin: '0' }}>
                     <div className="card" style={{ padding: '0', margin: '0' }}>
                         {/* <h5 className="text-center">Register</h5> */}

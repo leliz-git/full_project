@@ -6,9 +6,6 @@ import 'primereact/resources/themes/lara-light-indigo/theme.css';
 import 'primeicons/primeicons.css';
 import './index.css';
 import './flags.css';
-
-
-
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 // import { Link, Route, Routes } from 'react-router-dom'
@@ -19,6 +16,7 @@ import Auth from './componnents/Auth/Auth';
 import FormReg from './componnents/Auth/FormReg';
 import Alert from './componnents/Auth/Alert'
 import Rec_AddApartment from './componnents/Recourses/Rec_AddApartment';
+import GalleryApartment from './componnents/Apartments/GalleryApartment';
 const LazyAuth = React.lazy(() => import('./componnents/Auth/Auth'))
 const LazyFormDemo = React.lazy(() => import('./componnents/Auth/FormReg'))
 const LazyFormLog = React.lazy(() => import('./componnents/Auth/FormLog'))
@@ -26,8 +24,29 @@ const LazyRecourse = React.lazy(() => import('./componnents/Recourses/Rec_AddApa
 const LazyB_Recourse = React.lazy(() => import('./componnents/Broker/B_Recourses'))
 const LazyApartments = React.lazy(() => import('./componnents/Apartments/ApartmentGallery'))
 
+
 function App() {
- 
+  const navigate = useNavigate();
+  const [visible, setVisible] = useState(false)
+    const [visible1, setVisible1] = useState(false)
+    const [visible2, setVisible2] = useState(false)
+  const items = [
+    {
+        label: 'Sign In',
+        icon: 'pi pi-user',
+        command: () => navigate('./signin')
+    },
+    {
+        label: 'Register',
+        icon: 'pi pi-user-plus',
+        command: () => navigate('./register')
+    },
+    {
+        label: 'Add Apartment',
+        icon: 'pi pi-home',
+        command: () => navigate('./add-apartment')
+    }
+];
  
   
   return(
@@ -37,23 +56,25 @@ function App() {
       {/* <Auth></Auth> */}
       {/* <FormDemo></FormDemo> */}
       {/* <Alert></Alert> */}
-      {/* <Router>  <Router> נמצא רק כאן, ב-App */}
-
+      {/* <Router>   */}
+      <Menubar model={items} />
 
 <Suspense fallback={<div>Loading...</div>}>
     <Routes>
-        
+    {/* <Route path="/" element={<LazyAuth ></LazyAuth>} /> */}
+    <Route path="/" element={<GalleryApartment ></GalleryApartment>} />
         <Route path="/signin" element={<LazyFormLog />} />
         <Route path="/register" element={<LazyFormDemo />} />
         <Route path="/add-apartment" element={<LazyRecourse />} />
+        <Route path='/Apartments' element={<Suspense fallback="loading..."><LazyApartments /></Suspense>} />
     </Routes>
 </Suspense>
 {/* </Router> */}
       {/* <Route path='/' element={<Suspense fallback="loading..."><LazyAuth /></Suspense>} />
       <Route path='/Register' element={<Suspense fallback="loading..."><LazyFormDemo /></Suspense>} />
       <Route path='/Recourse' element={<Suspense fallback="loading..."><LazyRecourse /></Suspense>} />
-      <Route path='/Personal' element={<Suspense fallback="loading..."><LazyB_Recourse /></Suspense>} />
-      <Route path='/Apartments' element={<Suspense fallback="loading..."><LazyApartments /></Suspense>} /> */}
+      <Route path='/Personal' element={<Suspense fallback="loading..."><LazyB_Recourse /></Suspense>} /> */}
+      {/* <Route path='/Apartments' element={<Suspense fallback="loading..."><LazyApartments /></Suspense>} /> */}
       
     
     </div>

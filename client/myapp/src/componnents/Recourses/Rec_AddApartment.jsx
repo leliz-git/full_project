@@ -23,23 +23,25 @@ import './Rec_AddApartment.css';
 import 'primereact/resources/themes/lara-light-indigo/theme.css';
 import 'primereact/resources/primereact.min.css';
 
-        
+
 
 
 
 
 const Rec_AddApartment = (props) => {
+    const [visible, setVisible] = useState(false);
+    const [imagePreview, setImagePreview] = useState(null);  // למעקב אחרי התמונה שהועלתה
+    const [showMessage, setShowMessage] = useState(false);
 
     const accesstoken = useSelector((state) => state.token.token);
     const decoded = accesstoken ? jwtDecode(accesstoken) : null;
-    const [showMessage, setShowMessage] = useState(false);
     const [formData, setFormData] = useState({});
     const neighborhoodsData = [
-        'Ramot' ,
-         'Sanhedria',
+        'Ramot',
+        'Sanhedria',
         'Har-Nof',
-        'Romema' ,
-        'Ramat Shlomo' 
+        'Romema',
+        'Ramat Shlomo'
     ]
     const toast = useRef(null);
 
@@ -54,6 +56,7 @@ const Rec_AddApartment = (props) => {
 
 
     useEffect(() => {
+        setVisible(props.visible)
         // עדכון ה-state עם המערך
         setNeighborhoods(neighborhoodsData);
     }, []); // [] כדי שהאנימציה תתרחש בפעם הראשונה בלבד
@@ -98,11 +101,11 @@ const Rec_AddApartment = (props) => {
         description: ''
     })
 
-    
+
     const { control, formState: { errors }, handleSubmit, reset } = useForm({ defaultValues });
 
     const onSubmit = async (data) => {
-// debugger
+        // debugger
         try {
 
             console.log(data);
@@ -111,9 +114,9 @@ const Rec_AddApartment = (props) => {
                 {
                     method: 'POST',
                     url: 'http://localhost:7002/api/apartments/add',
-                    headers:{ Authorization: "Bearer " + accesstoken},
+                    headers: { Authorization: "Bearer " + accesstoken },
                     data: {
-                        images: defaultValues.images,
+                        images: imagePreview,
                         monopolism: data.monopolism,
                         neighborhood: data.neighborhood,
                         number_of_rooms: data.number_of_rooms,
@@ -122,15 +125,16 @@ const Rec_AddApartment = (props) => {
                         yad2: data.yad2,
                         description: data.description,
                         seller_id: decoded.seller_id
-                        },        
-                } 
+                    },
+                }
             )
-        
+
             if (res.status === 200) {
                 // alert("Hi user")
-                setFormData(data);
-                setShowMessage(true);
-                console.log(res);
+                 // alert("Hi user")
+                 props.setApartments(res.data);
+                 setShowMessage(true)
+                //  props.setVisible(false);
             }
 
             else {
@@ -142,44 +146,45 @@ const Rec_AddApartment = (props) => {
         }
     };
 
-   
-        const [files, setFiles] = useState([]);   
 
-    
-    
+    const [files, setFiles] = useState([]);
+
+
+
     const getFormErrorMessage = (name) => {
         return errors[name] && <small className="p-error">{errors[name].message}</small>
     };
 
     const dialogFooter = <div className="flex justify-content-center"><Button label="OK" className="p-button-text"
-        autoFocus onClick={() => { setShowMessage(false); props.setVisible2(false) }} /></div>;
+        autoFocus onClick={() => { setShowMessage(false); props.setVisible(false) }} ></Button></div>;
 
-        // const onUpload = () => {
-        //     toast.current.show({ severity: 'info', summary: 'Success', detail: 'File Uploaded' });
-        // };
-       
-           
-           
-            const [imagePreview, setImagePreview] = useState(null);  // למעקב אחרי התמונה שהועלתה
-            
-        
-            // פונקציה כדי לקבל את התמונה ולהציג תצוגה מקדימה
-            const onSelect = (e) => {
-                // לוקחים את הקובץ הראשון מתוך התמונות שנבחרו
-                const file = e.files[0];
-                const imageUrl = URL.createObjectURL(file);  // יוצרים URL זמני לתמונה
-                setImagePreview(imageUrl);  // מעדכנים את מצב התמונה עם ה-URL החדש
-            };
-        
-            const onUpload = (e) => {
-                
-        toast.current.show({
-            severity: 'success',
-            summary: 'העלאה הושלמה',
-            detail: 'התמונה הועלתה בהצלחה',
-            life: 3000
-        })}
-        
+    // const onUpload = () => {
+    //     toast.current.show({ severity: 'info', summary: 'Success', detail: 'File Uploaded' });
+    // };
+
+
+
+
+
+    // פונקציה כדי לקבל את התמונה ולהציג תצוגה מקדימה
+    const onSelect = (e) => {
+        // לוקחים את הקובץ הראשון מתוך התמונות שנבחרו
+        const file = e.files[0];
+        console.log(URL.createObjectURL(file));
+        const imageUrl = URL.createObjectURL(file);  // יוצרים URL זמני לתמונה
+        setImagePreview(imageUrl);  // מעדכנים את מצב התמונה עם ה-URL החדש
+    };
+
+    // const onUpload = (e) => {
+
+    //     toast.current.show({
+    //         severity: 'success',
+    //         summary: 'העלאה הושלמה',
+    //         detail: 'התמונה הועלתה בהצלחה',
+    //         life: 3000
+    //     })
+    // }
+
 
     return (
 
@@ -196,11 +201,11 @@ const Rec_AddApartment = (props) => {
                 </div>
             </Dialog>
 
-          
 
-            <Dialog visible={props.visible2} style={{ width: '28vw' }}
-                onHide={() => { if (!props.visible2) return; props.setVisible2(false); }}>
-                   
+
+            <Dialog visible={visible} onHide={() => props.onHide()} style={{ width: '28vw', margin: '0', marginTop: '0', padding: '0' }}
+               >
+
 
                 <div className="flex justify-content-center">
                     <div className="card">
@@ -222,7 +227,7 @@ const Rec_AddApartment = (props) => {
 
                             <div className="field">
                                 <span className="p-float-label">
-                                    <Controller name="number_of_rooms"  control={control} render={({ field, fieldState }) => (
+                                    <Controller name="number_of_rooms" control={control} render={({ field, fieldState }) => (
                                         <InputText type="number" min="1" step="1" id={field.name} {...field} className={classNames({ 'p-invalid': fieldState.invalid })}
                                             onValueChange={(e) => (field.onChange(e.target.value),
                                                 setDefaultValues(prevValues => ({ ...prevValues, number_of_rooms: e.target.value })))}
@@ -287,51 +292,51 @@ const Rec_AddApartment = (props) => {
                                 )} />
                                 <label htmlFor="yad2" className={classNames({ 'p-error': errors.accept })}>yad2</label>
                             </div>
-{/*                             
+                            {/*                             
                             <Toast ref={toast}></Toast>
                             <FileUpload mode="basic" name="demo[]" url="/api/upload" accept="image/*" maxFileSize={1000000} onUpload={onUpload} auto chooseLabel="Browse" />
                            */}
                             <div>
-           
-            <Toast ref={toast}></Toast>
 
-            {/* רכיב FileUpload */}
-            <FileUpload
-                mode="basic"
-                name="demo[]"
-                url="/api/upload"
-                accept="image/*"
-                maxFileSize={1000000}
-                onSelect={onSelect}  // פונקציה שתופסת את התמונות שנבחרו
+                                <Toast ref={toast}></Toast>
+
+                                {/* רכיב FileUpload */}
+                                <FileUpload
+                                    mode="basic"
+                                    name="demo[]"
+                                    url="/api/upload"
+                                    accept="image/*"
+                                    maxFileSize={1000000}
+                                    onSelect={onSelect}  // פונקציה שתופסת את התמונות שנבחרו
 
 
-                onUpload={onUpload}
-                auto
-                chooseLabel="Browse"
-            />
+                                    // onUpload={onUpload}
+                                    auto
+                                    chooseLabel="Browse"
+                                />
 
-            {/* תצוגה מקדימה של התמונה אם נבחרה */}
-            {imagePreview && (
-                <div style={{ marginTop: '20px' }}>
-                    {/* <h5>תצוגה מקדימה:</h5> */}
-                    <img
-                        src={imagePreview}
-                        alt="תצוגה מקדימה"
-                        style={{ width: '200px', height: 'auto', borderRadius: '8px' }}
-                    />
-                </div>
-            )}
-        </div>
-    
-         
-   
-    
-        
+                                {/* תצוגה מקדימה של התמונה אם נבחרה */}
+                                {imagePreview && (
+                                    <div style={{ marginTop: '20px' }}>
+                                        {/* <h5>תצוגה מקדימה:</h5> */}
+                                        <img
+                                            src={imagePreview}
+                                            alt="תצוגה מקדימה"
+                                            style={{ width: '200px', height: 'auto', borderRadius: '8px' }}
+                                        />
+                                    </div>
+                                )}
+                            </div>
+
+
+
+
+
                             <div className="field">
                                 <span className="p-float-label">
                                     <Controller name="description" control={control} render={({ field, fieldState }) => (
-                                        <InputTextarea rows={8} cols={30} id={field.name} {...field} autoFocus 
-                                        className={classNames({ 'p-invalid': fieldState.invalid })}
+                                        <InputTextarea rows={8} cols={30} id={field.name} {...field} autoFocus
+                                            className={classNames({ 'p-invalid': fieldState.invalid })}
                                             onValueChange={(e) => (field.onChange(e.target.value),
                                                 setDefaultValues(prevValues => ({ ...prevValues, number_of_rooms: e.target.value })))}
                                         />
@@ -346,7 +351,7 @@ const Rec_AddApartment = (props) => {
                             <br></br>
                             <Button type="button" label="reset" onClick={() => (reset())} className='reset1'></Button>
                             <Button type="submit" label="send" className="mt-2"
-
+                                 
                             />
 
                         </form>

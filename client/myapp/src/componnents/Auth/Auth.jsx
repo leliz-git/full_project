@@ -78,34 +78,38 @@ const Auth = () => {
     );
     return (
 
-        <div className="card">
-           <Menubar model={items} start={start} end={end}/>
-           <div className="card">
-            <Menubar model={items} />
-           
-            <Button label="Sign In" onClick={() => navigate('/signin')} severity="success"
+        // <div className="card">
+        //    <Menubar model={items} start={start} end={end}/>
+        //    <div className="card">
+        //     <Menubar model={items} />
+           <div>
+            {/* <Button label="Sign In" onClick={() => navigate('/signin')} severity="success"
                 className="w-10rem_mx-auto" style={{ width: '10%', height: '4%' }} />
 
             <Button label="Register" onClick={() => navigate('/register')} severity="success"
                 className="w-10rem" style={{ width: '6%', height: '4%' }} />
 
             <Button label="Apartment" onClick={() => navigate('/add-apartment')} severity="success"
-                className="w-10rem" style={{ width: '20%', height: '4%' }} />
+                className="w-10rem" style={{ width: '20%', height: '4%' }} /> */}
 
-            {/* כאן תטעין את קומפוננטות לפי ה־Routes ולא ישירות */}
-        </div>
-                    {/* <Button label="Sign in"  onClick={() => {handleOpenLogin() }}  severity="success" className="w-10rem_mx-auto" style={{ width: '10%', height: '4%' }}/> */}
-                    {/* <br></br>
-                    <br></br> */}
-                    {/* <Button label="Register" onClick={() => { handleOpenRegister() } }  severity="success" className="w-10rem" style={{ width: '6%', height: '4%' }}  /> */}
+           
+       
+                     {/* <Button label="Sign in"  onClick={() => {handleOpenLogin() }}  severity="success" className="w-10rem_mx-auto" style={{ width: '10%', height: '4%' }}/> */}
+                     {/* <br></br>
+                    // <br></br> */}
+                     {/* <Button label="Register" onClick={() => { handleOpenRegister() } }  severity="success" className="w-10rem" style={{ width: '6%', height: '4%' }}  /> */}
                    
-                    {/* <Button label="Apartment" onClick={() => { handleOpenRecourse() } }  severity="success" className="w-10rem" style={{ width: '20%', height: '4%' }}  /> */}
-                        {/* <br></br> */}
+                     {/* <Button label="Apartment" onClick={() => { handleOpenRecourse() } }  severity="success" className="w-10rem" style={{ width: '20%', height: '4%' }}  /> */}
+                         {/* <br></br> */}
                         {/* <br></br><br></br> */}
+                    
                     <ApartmentGallery></ApartmentGallery>
-                    {/* {visible && <FormLog setVisible={setVisible} visible={visible}/>} */}
-                    {/* {visible1 && <FormReg setVisible1={setVisible1} visible1={visible1} />} */}
-                    {/* {visible2 && <Rec_AddApartment setVisible2={setVisible2} visible2={visible2}/>} */}
+                    
+                  
+
+                    {/* {visible && <FormLog setVisible={setVisible} visible={visible}/>} 
+                     {visible1 && <FormReg setVisible1={setVisible1} visible1={visible1}/>} 
+                   {visible2 && <Rec_AddApartment setVisible2={setVisible2} visible2={visible2}/>} */}
                 </div>
        
     )
