@@ -17,6 +17,13 @@ import { InputTextarea } from 'primereact/inputtextarea';
 import { InputNumber } from 'primereact/inputnumber';
 import { useSelector } from 'react-redux'; // ייבוא useSelector
 import { jwtDecode } from 'jwt-decode';
+import { FileUpload } from 'primereact/fileupload';
+import { Toast } from 'primereact/toast';
+import './Rec_AddApartment.css';
+import 'primereact/resources/themes/lara-light-indigo/theme.css';
+import 'primereact/resources/primereact.min.css';
+
+        
 
 
 
@@ -34,6 +41,7 @@ const Rec_AddApartment = (props) => {
         'Romema' ,
         'Ramat Shlomo' 
     ]
+    const toast = useRef(null);
 
     const [neighborhoods, setNeighborhoods] = useState([]);
     const [selectedNeighborhood, setSelectedNeighborhood] = useState(null);
@@ -90,7 +98,7 @@ const Rec_AddApartment = (props) => {
         description: ''
     })
 
-
+    
     const { control, formState: { errors }, handleSubmit, reset } = useForm({ defaultValues });
 
     const onSubmit = async (data) => {
@@ -134,7 +142,11 @@ const Rec_AddApartment = (props) => {
         }
     };
 
+   
+        const [files, setFiles] = useState([]);   
 
+    
+    
     const getFormErrorMessage = (name) => {
         return errors[name] && <small className="p-error">{errors[name].message}</small>
     };
@@ -142,11 +154,34 @@ const Rec_AddApartment = (props) => {
     const dialogFooter = <div className="flex justify-content-center"><Button label="OK" className="p-button-text"
         autoFocus onClick={() => { setShowMessage(false); props.setVisible2(false) }} /></div>;
 
-
+        // const onUpload = () => {
+        //     toast.current.show({ severity: 'info', summary: 'Success', detail: 'File Uploaded' });
+        // };
+       
+           
+           
+            const [imagePreview, setImagePreview] = useState(null);  // למעקב אחרי התמונה שהועלתה
+            
+        
+            // פונקציה כדי לקבל את התמונה ולהציג תצוגה מקדימה
+            const onSelect = (e) => {
+                // לוקחים את הקובץ הראשון מתוך התמונות שנבחרו
+                const file = e.files[0];
+                const imageUrl = URL.createObjectURL(file);  // יוצרים URL זמני לתמונה
+                setImagePreview(imageUrl);  // מעדכנים את מצב התמונה עם ה-URL החדש
+            };
+        
+            const onUpload = (e) => {
+                
+        toast.current.show({
+            severity: 'success',
+            summary: 'העלאה הושלמה',
+            detail: 'התמונה הועלתה בהצלחה',
+            life: 3000
+        })}
+        
 
     return (
-
-
 
         <div className="form-demo">
             <Dialog visible={showMessage} onHide={() => setShowMessage(false)} position="top" footer={dialogFooter}
@@ -161,7 +196,7 @@ const Rec_AddApartment = (props) => {
                 </div>
             </Dialog>
 
-
+          
 
             <Dialog visible={props.visible2} style={{ width: '28vw' }}
                 onHide={() => { if (!props.visible2) return; props.setVisible2(false); }}>
@@ -175,8 +210,8 @@ const Rec_AddApartment = (props) => {
                             <div className="field">
                                 <span className="p-float-label">
                                     <Controller name="price" control={control} render={({ field, fieldState }) => (
-                                        <InputNumber id={field.name} inputId="integeronly" autoFocus
-                                            onValueChange={(e) => (field.onChange(e.target.value),
+                                        <InputNumber min="1" step="1" value={field.value} id={field.name} inputId="integeronly" autoFocus
+                                            onValueChange={(e) => (field.onChange(e.value),
                                                 setDefaultValues(prevValues => ({ ...prevValues, firstName: e.target.value })))} />
                                     )} />
                                     <label htmlFor="price">price</label>
@@ -187,8 +222,8 @@ const Rec_AddApartment = (props) => {
 
                             <div className="field">
                                 <span className="p-float-label">
-                                    <Controller name="number_of_rooms" control={control} render={({ field, fieldState }) => (
-                                        <InputText type="number" id={field.name} {...field} className={classNames({ 'p-invalid': fieldState.invalid })}
+                                    <Controller name="number_of_rooms"  control={control} render={({ field, fieldState }) => (
+                                        <InputText type="number" min="1" step="1" id={field.name} {...field} className={classNames({ 'p-invalid': fieldState.invalid })}
                                             onValueChange={(e) => (field.onChange(e.target.value),
                                                 setDefaultValues(prevValues => ({ ...prevValues, number_of_rooms: e.target.value })))}
                                         />
@@ -252,8 +287,46 @@ const Rec_AddApartment = (props) => {
                                 )} />
                                 <label htmlFor="yad2" className={classNames({ 'p-error': errors.accept })}>yad2</label>
                             </div>
+{/*                             
+                            <Toast ref={toast}></Toast>
+                            <FileUpload mode="basic" name="demo[]" url="/api/upload" accept="image/*" maxFileSize={1000000} onUpload={onUpload} auto chooseLabel="Browse" />
+                           */}
+                            <div>
+           
+            <Toast ref={toast}></Toast>
+
+            {/* רכיב FileUpload */}
+            <FileUpload
+                mode="basic"
+                name="demo[]"
+                url="/api/upload"
+                accept="image/*"
+                maxFileSize={1000000}
+                onSelect={onSelect}  // פונקציה שתופסת את התמונות שנבחרו
 
 
+                onUpload={onUpload}
+                auto
+                chooseLabel="Browse"
+            />
+
+            {/* תצוגה מקדימה של התמונה אם נבחרה */}
+            {imagePreview && (
+                <div style={{ marginTop: '20px' }}>
+                    {/* <h5>תצוגה מקדימה:</h5> */}
+                    <img
+                        src={imagePreview}
+                        alt="תצוגה מקדימה"
+                        style={{ width: '200px', height: 'auto', borderRadius: '8px' }}
+                    />
+                </div>
+            )}
+        </div>
+    
+         
+   
+    
+        
                             <div className="field">
                                 <span className="p-float-label">
                                     <Controller name="description" control={control} render={({ field, fieldState }) => (
@@ -282,7 +355,7 @@ const Rec_AddApartment = (props) => {
             </Dialog>
         </div>
     );
-}
+};
 
 
 export default Rec_AddApartment;

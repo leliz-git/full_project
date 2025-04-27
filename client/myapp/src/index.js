@@ -13,12 +13,14 @@ import {  persistor } from './redux/store'; // Make sure your store is configure
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
  
-    <BrowserRouter> <React.StrictMode>
+    <BrowserRouter> 
+    <React.StrictMode>
      <Provider store={store} >
      <PersistGate loading={null} persistor={persistor}>
     <App />
     </PersistGate>
-    </Provider></React.StrictMode>
+    </Provider>
+    </React.StrictMode>
     </BrowserRouter>
 );
 

@@ -1,0 +1,8 @@
+.p-fileupload-button.p-button-upload {
+    display: none !important;
+}
+
+/* הסתרת כפתור ביטול */
+.p-fileupload-button.p-button-cancel {
+    display: none !important;
+}

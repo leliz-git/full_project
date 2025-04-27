@@ -37,7 +37,7 @@ const FormReg = (props) => {
 
     // }
     const onSubmit = async (data) => {
-        debugger
+        // debugger
         try {
 
             const res = await axios(
@@ -69,12 +69,15 @@ const FormReg = (props) => {
 
             }
         } catch (e) {
-            console.error(e)
-            alert("Registration failed")
+            if(e.response && e.response.status === 409)
+                alert("Duplicate username")
+            else
+            {
+                console.error(e)
+                alert("Registration failed")
+            }
         }
-
         // reset()
-
     };
 
 
@@ -91,7 +94,7 @@ const FormReg = (props) => {
 
 
         <div className="form-demo">
-            {/* <Dialog visible={showMessage} onHide={() => setShowMessage(false)} position="top" footer={dialogFooter} 
+            { <Dialog visible={showMessage} onHide={() => setShowMessage(false)} position="top" footer={dialogFooter} 
             showHeader={false} breakpoints={{ '960px': '80vw' }} style={{ width: '30vw' }}>
                 <div className="flex justify-content-center flex-column pt-6 px-3">
                     <i className="pi pi-check-circle" style={{ fontSize: '5rem', color: 'var(--green-500)' }}></i>
@@ -101,7 +104,7 @@ const FormReg = (props) => {
                         <b>{formData.name}</b> ;
                     </p>
                 </div>
-            </Dialog> */}
+            </Dialog> }
 
             <Dialog visible={props.visible1} style={{ width: '28vw', margin: '0', marginTop: '0', padding: '0' }} 
             onHide={() => { if (!props.visible1) return; props.setVisible1(false); }}>

@@ -48,7 +48,7 @@ const FormLog = (props) => {
    
     
     const onSubmit = async(data) => {
-debugger
+// debugger
         try {
             console.log(data);
 
@@ -75,7 +75,8 @@ debugger
                 setUser(res.data.user);  
                 // alert('Hi User')
                 const userId=res.data.user._id//////
-                navigate(`/login/${userId}`)///////
+                // navigate(`/Apartments/${userId}`)///////
+                navigate(`/Apartments`)///////
             }
             else{
                 
