@@ -74,15 +74,16 @@ const FormLog = (props) => {
                 setShowMessage(true);
                 console.log(res);
                 setUser(res.data.user);  
-                // alert('Hi User')
-                const userId=res.data.user._id//////
+                
+                
                 // navigate(`/Apartments/${userId}`)///////
                 if(res.data.user.roles==="Broker")
                 {
-                    navigate(`/Apartments`)///////
+                    navigate(`/MyApartments`)
                 }
                 else if(res.data.user.roles==="Buyer" || res.data.user.roles==="Seller")
                 {
+                    navigate(`/Apartments`)
                     // alert("Hi user")
                     setVisible(false)
                 }
@@ -100,7 +101,6 @@ const FormLog = (props) => {
 
     
     };
- 
 
     const getFormErrorMessage = (name) => {
         return errors[name] && <small className="p-error">{errors[name].message}</small>

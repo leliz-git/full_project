@@ -103,8 +103,7 @@ const Rec_AddApartment = (props) => {
             )
 
             if (res.status === 200) {
-                // alert("Hi user")
-                // alert("Hi user")
+               
                 props.setApartments(res.data);
                 setShowMessage(true)
                 //  props.setVisible(false);

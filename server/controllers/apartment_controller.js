@@ -32,13 +32,34 @@ const getAllApartmentByBroker = async (req, res) => {
 }//כדי שיראה את זה באיזור האישי שלו
 
 const getAllApartment = async (req, res) => {
+    
     const apartments = await Apartment.find({'broker_bool': true}).lean()
     if (!apartments?.length)
+    {
         return res.status(400).json({ message: 'No apartments found' })
+    }
     res.json(apartments)
 
 }//שכל מי שנכנס לאתר יראה
+const CompleteApartment = async (req,res)=>{
+    console.log("!!")
+    const{_id} = req.body
+    if (!_id) {
+        // console.log("!")
+        return res.status(400).json({ message: 'id is required' })
+    }
+    const apartment = await Apartment.findById(_id).exec()
 
+    if (!apartment) {
+        // console.log("?")
+        return res.status(400).json({ message: 'apartment not found' })
+    }
+    apartment.broker_bool=!apartment.broker_bool;
+    const updateApartment = await apartment.save()
+    const apartments = await Apartment.find().lean()
+    console.log("!")
+    res.json(apartments)
+}
 
 const updateApartment = async (req, res) => {
     // const { _id } = req.params
@@ -87,6 +108,7 @@ const deleteApartment = async (req, res) => {
     const { _id } = req.body
     // const { id } = req.params
     const apartment = await Apartment.findById(_id).exec()
+    
     if (!apartment) {
         return res.status(400).json({ message: 'Apartment not found' })
     }
@@ -96,6 +118,7 @@ const deleteApartment = async (req, res) => {
 }
 
 const getApartmentById = async (req, res) => {//לבדוק אם צריך middleware
+    console.log("!")
     const { id } = req.params
 console.log(id);
     const apartment = await Apartment.findById(id).lean()
@@ -103,8 +126,10 @@ console.log(id);
     if (!apartment) {
         return res.status(400).json({ message: 'No apartment found' })
     }
+    console.log("!")
+    console.log(apartment)
     res.json(apartment)
 }
 
-module.exports = { createNewApartment, getAllApartment, updateApartment, updateNumofIntrest, deleteApartment, getApartmentById, getAllApartmentByBroker }
+module.exports = { createNewApartment, getAllApartment,CompleteApartment, updateApartment, updateNumofIntrest, deleteApartment, getApartmentById, getAllApartmentByBroker }
 

@@ -8,6 +8,7 @@ import './index.css';
 import './flags.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch , useSelector } from 'react-redux';
 // import { Link, Route, Routes } from 'react-router-dom'
 import { Suspense, useState } from 'react';
 import React from 'react';
@@ -17,12 +18,16 @@ import FormReg from './componnents/Auth/FormReg';
 import Alert from './componnents/Auth/Alert'
 import Rec_AddApartment from './componnents/Recourses/Rec_AddApartment';
 import GalleryApartment from './componnents/Broker/GalleryApartment';
+import{setToken,logOut}from './redux/tokenSlice';
 const LazyAuth = React.lazy(() => import('./componnents/Auth/Auth'))
 const LazyFormDemo = React.lazy(() => import('./componnents/Auth/FormReg'))
 const LazyFormLog = React.lazy(() => import('./componnents/Auth/FormLog'))
 const LazyRecourse = React.lazy(() => import('./componnents/Recourses/Rec_AddApartment'))
 const LazyB_Recourse = React.lazy(() => import('./componnents/Broker/B_Recourses'))
 const LazyApartments = React.lazy(() => import('./componnents/Broker/GalleryApartment'))
+const LazyApartmentsGalery = React.lazy(()=>import('./componnents/Apartments/ApartmentGallery'))
+const LazyApartmentsDetails = React.lazy(()=>import('./componnents/Apartments/ApartmentDetails'))
+
 
 
 function App() {
@@ -30,43 +35,44 @@ function App() {
   const [visible, setVisible] = useState(false)
     const [visible1, setVisible1] = useState(false)
     const [visible2, setVisible2] = useState(false)
-  const items = [
-    {
-        label: 'Sign In',
-        icon: 'pi pi-user',
-        command: () => navigate('./signin')
-    },
-    {
+    const dispatch = useDispatch();
+ 
+    // מצב הלוגין נשמר ב-Redux, בודק אם יש טוקן
+    const token = useSelector(state => state.token.token);
+    const handleLogout = () => {
+      dispatch(logOut());  // הסרת הטוקן מה-Redux
+      navigate('/');  // ניווט לעמוד ה-signin לאחר התנתקות
+    };
+    // פריטי התפריט
+    const items = [
+      {
+        label: token ? 'Logout' : 'Sign In',  // אם יש טוקן, "Logout", אחרת "Sign In"
+        icon: token ? 'pi pi-sign-out' : 'pi pi-user',  // אם יש טוקן, "Logout" אייקון, אחרת "Sign In"
+        command: token ? handleLogout : () => navigate('./signin')  // אם יש טוקן, יבוצע Logout אחרת ינווט ל-Sign In
+      },
+      {
         label: 'Register',
         icon: 'pi pi-user-plus',
         command: () => navigate('./register')
-    },
-    {
-        label: 'Add Apartment',
-        icon: 'pi pi-home',
-        command: () => navigate('./add-apartment')
-    }
-];
- 
+      }
+    ];
+  
   
   return(
     <div className="App">
 
-    {/* <Rec_AddApartment></Rec_AddApartment> */}
-      {/* <Auth></Auth> */}
-      {/* <FormDemo></FormDemo> */}
-      {/* <Alert></Alert> */}
-      {/* <Router>   */}
       <Menubar model={items} />
 
 <Suspense fallback={<div>Loading...</div>}>
+
     <Routes>
-    {/* <Route path="/" element={<LazyAuth ></LazyAuth>} /> */}
-    <Route path="/" element={<GalleryApartment ></GalleryApartment>} />
+    <Route path="/" element={<LazyApartmentsGalery ></LazyApartmentsGalery>} />
+    <Route path="/apartment/:id" element={<LazyApartmentsDetails ></LazyApartmentsDetails>} />
         <Route path="/signin" element={<LazyFormLog />} />
         <Route path="/register" element={<LazyFormDemo />} />
         <Route path="/add-apartment" element={<LazyRecourse />} />
-        <Route path='/Apartments' element={<Suspense fallback="loading..."><LazyApartments /></Suspense>} />
+        <Route path='/MyApartments' element={<Suspense fallback="loading..."><LazyApartments /></Suspense>} />
+        <Route path='/Apartments' element={<Suspense fallback="loading..."><LazyApartmentsGalery /></Suspense>} />
     </Routes>
 </Suspense>
 {/* </Router> */}

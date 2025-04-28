@@ -9,6 +9,7 @@ router.get("/getAllApartmentsByBroker",verifyJWT,brokerJWT, Apartmentcontroller.
 router.get("/getbyid/:id",verifyJWT, Apartmentcontroller.getApartmentById)
 // router.post("/add",verifyJWT,brokerJWT, Usercontroller.createNewApartment)
 router.post("/add",verifyJWT, Apartmentcontroller.createNewApartment)//זה יישמר במסד נתונים בתור דירה, צריך לשנות בקבלת כל הדירות שרק אם זה טופל ע"י המתווך יראו את זה
+router.put("/complete",verifyJWT,brokerJWT, Apartmentcontroller.CompleteApartment)
 router.put("/update",verifyJWT,brokerJWT, Apartmentcontroller.updateApartment)
 router.delete("/delete",verifyJWT,brokerJWT, Apartmentcontroller.deleteApartment)
 router.put("/NumOfInterest",verifyJWT,Apartmentcontroller.updateNumofIntrest )

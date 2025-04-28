@@ -26,7 +26,7 @@ const GalleryApartment = () => {
         _id:null,
         id: null,
         neighborhood: '',
-        image: null,
+        images: null,
         description: '',
         // category: null,
         price: 0,
@@ -131,10 +131,47 @@ const GalleryApartment = () => {
         setApartmentDialog1(true);
     };
 
-    const confirmDeleteApartment = (Apartment) => {
-        setApartment(Apartment);
-        setDeleteApartmentDialog(true);
-    };
+    const confirmCompleteApartment=async(Apartment)=>{
+        try {
+            const res = await axios({
+                method: 'PUT',
+                url: `http://localhost:7002/api/apartments/complete`,
+                headers: { Authorization: "Bearer " + accesstoken },
+                data: { _id: Apartment._id }
+            });
+    
+            if (res.status === 200) {
+                console.log(res);
+                setApartments(prev => prev.filter(a => a._id !== Apartment._id)); // מחיקה מהסטייט
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    const confirmDeleteApartment =async (Apartment) => {
+            try {
+                const res = await axios({
+                    method: 'delete',
+                    url: `http://localhost:7002/api/apartments/delete`,
+                    headers: { Authorization: "Bearer " + accesstoken },
+                    data: { _id: Apartment._id }
+                });
+        
+                if (res.status === 200) {
+                    console.log(res);
+                    setApartments(prev => prev.filter(a => a._id !== Apartment._id)); // מחיקה מהסטייט
+                    setDeleteApartmentDialog(true); // פתיחת דיאלוג אם צריך
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        
+       
+    
+       
+    
 
     const deleteApartment = () => {
         let _Apartments = apartments.filter((val) => val.id !== apartment.id);
@@ -215,7 +252,7 @@ const GalleryApartment = () => {
         return (
             <div className="flex flex-wrap gap-2">
                 <Button label="New" icon="pi pi-plus" severity="success" onClick={openNew} />
-                <Button label="Delete" icon="pi pi-trash" severity="danger" onClick={confirmDeleteSelected} disabled={!selectedApartments || !selectedApartments.length} />
+                {/* <Button label="Delete" icon="pi pi-trash" severity="danger" onClick={confirmDeleteSelected} disabled={!selectedApartments || !selectedApartments.length} /> */}
             </div>
         );
     };
@@ -225,7 +262,7 @@ const GalleryApartment = () => {
     };
 
     const imageBodyTemplate = (rowData) => {
-        return <img src={`${rowData.image}`} alt={rowData.image} className="shadow-2 border-round" style={{ width: '64px' }} />;
+        return <img src={`${rowData.images}`} alt={rowData.images} className="shadow-2 border-round" style={{ width: '64px' }} />;
     };
 // src={`https://primefaces.org/cdn/primereact/images/Apartment/${rowData.image}`}
     const priceBodyTemplate = (rowData) => {
@@ -243,8 +280,10 @@ const GalleryApartment = () => {
     const actionBodyTemplate = (rowData) => {
         return (
             <React.Fragment>
+                <Button icon="pi pi-upload" rounded outlined className="mr-2" onClick={() => confirmCompleteApartment(rowData)} />
                 <Button icon="pi pi-pencil" rounded outlined className="mr-2" onClick={() => editApartment(rowData)} />
                 <Button icon="pi pi-trash" rounded outlined severity="danger" onClick={() => confirmDeleteApartment(rowData)} />
+                
             </React.Fragment>
         );
     };
@@ -305,12 +344,12 @@ const GalleryApartment = () => {
                     <Column selectionMode="multiple" exportable={false}></Column>
                     <Column field="price" header="price" body={priceBodyTemplate} ></Column>
                     <Column field="neighborhood" header="neighborhood" ></Column>
-                    <Column field="image" header="Image" body={imageBodyTemplate}></Column>
+                    <Column field="images" header="Image" body={imageBodyTemplate}></Column>
                     <Column field="number_of_rooms" header="number of rooms"  ></Column>
                     <Column field="floor" header="floor" ></Column>
                     <Column field="number_of_interested" header="number of interests" ></Column>
                     <Column field="description" header="description" ></Column>
-                    <Column field="_id" header="_id" ></Column>
+                    {/*<Column field="_id" header="_id" ></Column>
                     {/* <Column field="inventoryStatus" header="Status" sortable style={{ minWidth: '12rem' }}></Column> */}
                     <Column body={actionBodyTemplate} exportable={false} style={{ minWidth: '12rem' }}></Column>
                 </DataTable>
