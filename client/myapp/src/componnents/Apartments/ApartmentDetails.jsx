@@ -1,5 +1,4 @@
 
-
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -9,6 +8,7 @@ import { Card } from 'primereact/card';
 
 const ApartmentDetails = () => {
   const { _id } = useParams();
+  
   const navigate = useNavigate();
   const [apartment, setApartment] = useState({
     _id: null,

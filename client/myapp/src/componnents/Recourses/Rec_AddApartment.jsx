@@ -97,14 +97,15 @@ const Rec_AddApartment = (props) => {
                         price: data.price,
                         yad2: data.yad2,
                         description: data.description,
-                        seller_id: decoded.seller_id
+                        // seller_id: decoded.seller_id 
                     },
                 }
             )
 
             if (res.status === 200) {
                
-                props.setApartments(res.data);
+                const apartments=res.data.filter(apartment=>apartment.broker_bool===false)
+                props.setApartments(apartments);
                 setShowMessage(true)
                 //  props.setVisible(false);
             }
@@ -113,6 +114,7 @@ const Rec_AddApartment = (props) => {
 
             }
         } catch (e) {
+            
             console.error(e)
             alert("Add recourse failed")
         }

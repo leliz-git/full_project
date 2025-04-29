@@ -67,7 +67,7 @@ function App() {
 
     <Routes>
     <Route path="/" element={<LazyApartmentsGalery ></LazyApartmentsGalery>} />
-    <Route path="/apartment/:id" element={<LazyApartmentsDetails ></LazyApartmentsDetails>} />
+    <Route path="/apartment/:_id" element={<LazyApartmentsDetails ></LazyApartmentsDetails>} />
         <Route path="/signin" element={<LazyFormLog />} />
         <Route path="/register" element={<LazyFormDemo />} />
         <Route path="/add-apartment" element={<LazyRecourse />} />

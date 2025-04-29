@@ -223,12 +223,12 @@ const GalleryApartment = () => {
         toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Apartments Deleted', life: 3000 });
     };
 
-    const onCategoryChange = (e) => {
-        let _Apartment = { ...apartment };
+    // const onCategoryChange = (e) => {
+    //     let _Apartment = { ...apartment };
 
-        _Apartment['category'] = e.value;
-        setApartment(_Apartment);
-    };
+    //     _Apartment['category'] = e.value;
+    //     setApartment(_Apartment);
+    // };
 
     const onInputChange = (e, name) => {
         const val = (e.target && e.target.value) || '';
@@ -368,7 +368,7 @@ const GalleryApartment = () => {
                 </div>
             </Dialog> */}
 
-            {ApartmentDialog?<Rec_AddApartment setApartments={setApartments} setVisible={setApartmentDialog}  onHide={hideDialog} visible={ApartmentDialog}></Rec_AddApartment>:<></>}
+            {ApartmentDialog?<Rec_AddApartment  setApartments={setApartments} setVisible={setApartmentDialog}  onHide={hideDialog} visible={ApartmentDialog}></Rec_AddApartment>:<></>}
             {ApartmentDialog1?<Rec_UpdateApartment apartment={apartment} setApartments={setApartments} setVisible={setApartmentDialog1}  onHide={hideDialog1} visible={ApartmentDialog1}></Rec_UpdateApartment>:<></>}
 
             {/* <Dialog visible={deleteApartmentsDialog} style={{ width: '32rem' }} breakpoints={{ '960px': '75vw', '641px': '90vw' }} header="Confirm" modal footer={deleteApartmentsDialogFooter} onHide={hideDeleteApartmentsDialog}>

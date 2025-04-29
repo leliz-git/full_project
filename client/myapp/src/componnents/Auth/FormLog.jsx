@@ -106,7 +106,8 @@ const FormLog = (props) => {
         return errors[name] && <small className="p-error">{errors[name].message}</small>
     };
 
-    const dialogFooter = <div className="flex justify-content-center"><Button label="OK" className="p-button-text" autoFocus onClick={() => {setShowMessage(false);props.setVisible(false)}} /></div>;
+    const dialogFooter = <div className="flex justify-content-center"><Button label="OK" className="p-button-text" 
+    autoFocus onClick={() => {setShowMessage(false);props.setVisible(false)}} /></div>;
 
 useEffect(()=>{
     setVisible(true)

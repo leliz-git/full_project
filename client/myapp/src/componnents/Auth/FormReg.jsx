@@ -32,12 +32,9 @@ const FormReg = (props) => {
 
 
     const { control, formState: { errors }, handleSubmit, reset } = useForm({ defaultValues });
-    // const Register = async (props) => {
-
-
-    // }
+    
     const onSubmit = async (data) => {
-        // debugger
+        debugger
         try {
 
             const res = await axios(
@@ -59,14 +56,11 @@ const FormReg = (props) => {
                 setFormData(data);
                 setShowMessage(true);
                 console.log(res);
-                const userId=res.data.user._id//////
-                const name=res.data.name/////
-                navigate(`/register/${userId}/${name}`)/////
+                // const userId=res.data.user._id//////לבדוק איך מחזירים מהסרסר את כל היוזר
+                // const name=res.data.user.name/////
+                
+                // navigate(`/register/${userId}/${name}`)/////
                 // alert("Hi user")
-
-            }
-            else {
-
             }
         } catch (e) {
             if(e.response && e.response.status === 409)
@@ -86,7 +80,7 @@ const FormReg = (props) => {
     };
 
     const dialogFooter = <div className="flex justify-content-center"><Button label="OK" className="p-button-text" 
-    autoFocus onClick={() => { setShowMessage(false); props.setVisible1(false) }} /></div>;
+    autoFocus onClick={() => { setShowMessage(false); setVisible(false) }} /></div>;
 
 
 
@@ -105,9 +99,9 @@ const FormReg = (props) => {
                     </p>
                 </div>
             </Dialog> }
-
+           
             <Dialog visible={visible} style={{ width: '28vw', margin: '0', marginTop: '0', padding: '0' }} 
-            onHide={() => { if (!visible) return; setVisible(false);   }}>
+            onHide={() => { if (!visible) return; setVisible(false); navigate(`/`)  }}>
                 <div className="flex justify-content-center" style={{ padding: '0', margin: '0' }}>
                     <div className="card" style={{ padding: '0', margin: '0' }}>
                         {/* <h5 className="text-center">Register</h5> */}

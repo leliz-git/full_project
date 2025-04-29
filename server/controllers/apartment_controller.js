@@ -94,7 +94,7 @@ const updateApartment = async (req, res) => {
 const updateNumofIntrest = async (req, res) => {
     // getApartmentById()
     const { _id } = req.params
-
+    // const { _id } = req.body
     const apartment = await Apartment.findById(_id).lean()
 
     if (!apartment) {
@@ -102,6 +102,7 @@ const updateNumofIntrest = async (req, res) => {
     }
 
     apartment.number_of_interested = apartment.number_of_interested + 1
+    
 }
 
 const deleteApartment = async (req, res) => {
@@ -118,15 +119,17 @@ const deleteApartment = async (req, res) => {
 }
 
 const getApartmentById = async (req, res) => {//לבדוק אם צריך middleware
-    console.log("!")
-    const { id } = req.params
-console.log(id);
-    const apartment = await Apartment.findById(id).lean()
+    
+    // updateNumofIntrest(id)
+    
+    const { _id } = req.params
+    // updateNumofIntrest(_id)
+    const apartment = await Apartment.findById(_id).lean()
 
     if (!apartment) {
         return res.status(400).json({ message: 'No apartment found' })
     }
-    console.log("!")
+    
     console.log(apartment)
     res.json(apartment)
 }

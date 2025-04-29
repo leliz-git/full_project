@@ -41,6 +41,7 @@ const register = async (req, res) => {
         
         return res.status(201).json({
             message: `New user ${user.username} created`
+            
         })
     } else {
         return res.status(400).json({ message: 'Invalid user received' })
