@@ -129,6 +129,8 @@ const getApartmentById = async (req, res) => {//לבדוק אם צריך middlew
     if (!apartment) {
         return res.status(400).json({ message: 'No apartment found' })
     }
+    apartment.number_of_interested += 1;
+    
     
     console.log(apartment)
     res.json(apartment)

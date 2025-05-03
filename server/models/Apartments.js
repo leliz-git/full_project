@@ -43,8 +43,9 @@ const apartmentSchema = new mongoose.Schema({
         default:false
     },
     images:{
-        type:String
-        // default:
+        // type:String
+        type: [String], // מערך של מחרוזות
+    default: []
     },
     description:{
         type: String

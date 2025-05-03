@@ -129,8 +129,11 @@ useEffect(()=>{
                 
             </Dialog> */}
 
-            <Dialog header="Header" visible={visible} style={{  height: '20vw', width: '20vw', margin: '0', marginTop:'0', padding: '0'}} onHide={() => {if (!visible) return; setVisible(false); }}>
-            <div className="flex justify-content-center" >
+            <Dialog header="Header" visible={visible} style={{  height: '20vw', width: '20vw', margin: '0', marginTop:'0', padding: '0'}} 
+            onHide={() => {if (!visible) return; setVisible(false);navigate(`/`) }}>
+            <div className="flex justify-content-center" 
+           >
+            
                 <div className="card" style={{ padding: '0', margin: '0' }} >
               
                 {/* {visible && <Dialog_login setVisible={setVisible} visible={visible}/>} */}

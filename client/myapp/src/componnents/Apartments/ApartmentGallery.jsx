@@ -9,6 +9,8 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Toolbar } from 'primereact/toolbar';
+import { PrimeIcons } from 'primereact/api';
+
 import Rec_AddApartment from '../Recourses/Rec_AddApartment';
 
 
@@ -115,11 +117,14 @@ const openNew = () => {
                         {/* <img className="w-9 shadow-2 border-round" body={imageBodyTemplate(apartment.images)}  /> */}
                         <span className="text-2xl font-semibold" >{formatCurrency(apartment.price)}</span>
                         <span className="text-2xl font-semibold">{apartment.neighborhood}</span>
+                       
                         {/* <Rating value={apartment.number_of_interested} readOnly cancel={false}></Rating> */}
                     </div>
                     <div className="flex align-items-center justify-content-between">
                         <div className="text-2xl "><b>floor: </b>{apartment.floor}</div>
                         <div className="text-2xl "> <b> number of rooms: </b> {apartment.number_of_rooms}</div>
+                        <span className="pi pi-eye icon"> { apartment.number_of_interested} </span>
+                        {/* <div className="text-2xl "> <b>  </b> {apartment.images}</div> */}
                         {/* <div className="text-2xl ">{apartment.description}</div> */}
                       
                         

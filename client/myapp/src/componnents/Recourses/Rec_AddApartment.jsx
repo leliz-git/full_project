@@ -19,6 +19,8 @@ import { useSelector } from 'react-redux'; // ייבוא useSelector
 import { jwtDecode } from 'jwt-decode';
 import { FileUpload } from 'primereact/fileupload';
 import { Toast } from 'primereact/toast';
+
+
 import './Rec_AddApartment.css';
 import 'primereact/resources/themes/lara-light-indigo/theme.css';
 import 'primereact/resources/primereact.min.css';
@@ -28,7 +30,8 @@ const Rec_AddApartment = (props) => {
     const [visible, setVisible] = useState(false);
     const [imagePreview, setImagePreview] = useState(null);  // למעקב אחרי התמונה שהועלתה
     const [showMessage, setShowMessage] = useState(false);
-
+    const [selectedFiles, setSelectedFiles] = useState([]);
+    const [images, setImages] = useState([]);
     const accesstoken = useSelector((state) => state.token.token);
     const decoded = accesstoken ? jwtDecode(accesstoken) : null;
     const [formData, setFormData] = useState({});
@@ -116,7 +119,7 @@ const Rec_AddApartment = (props) => {
         } catch (e) {
             
             console.error(e)
-            alert("Add recourse failed")
+            alert("Add apartment failed")
         }
     };
 
@@ -158,6 +161,28 @@ const Rec_AddApartment = (props) => {
     //         life: 3000
     //     })
     // }
+    
+
+    // Function to handle file upload
+    const onUpload = (event) => {
+      const uploadedFiles = event.files || []; // Ensure event.files exists
+      setImages((prevImages) => {
+        // Check for duplicates based on file name
+        const newFiles = uploadedFiles.filter(
+          (uploadedFile) => !prevImages.some((image) => image.name === uploadedFile.name)
+        );
+        return [...prevImages, ...newFiles];
+      });
+      console.log('Uploaded images:', uploadedFiles);
+    };
+  
+    // Function to clear all uploaded images
+    const onClear = () => {
+      setImages([]);
+      console.log('Upload canceled');
+    };
+    
+    
 
 
     return (
@@ -266,16 +291,52 @@ const Rec_AddApartment = (props) => {
                                 )} />
                                 <label htmlFor="yad2" className={classNames({ 'p-error': errors.accept })}>yad2</label>
                             </div>
-                            {/*                             
-                            <Toast ref={toast}></Toast>
+                                                        
+                            {/* <Toast ref={toast}></Toast>
                             <FileUpload mode="basic" name="demo[]" url="/api/upload" accept="image/*" maxFileSize={1000000} onUpload={onUpload} auto chooseLabel="Browse" />
                            */}
-                            <div>
+                                       {/* <FileUpload name="demo[]" url={'/api/upload'} multiple accept="image/*" maxFileSize={1000000} emptyTemplate={<p className="m-0">Drag and drop files to here to upload.</p>} /> */}
 
-                                <Toast ref={toast}></Toast>
+                            <div>
+                            <div>
+ 
+     
+      
+     
+    </div>
+    <div>
+      <FileUpload
+        name="images[]"
+        url="/api/upload" // Replace with the correct API endpoint
+        multiple // Allow selecting multiple files
+        accept="image/*" // Accept only image files
+        maxFileSize={1000000} // Max file size: 1MB
+        onUpload={onUpload}
+        onClear={onClear}
+        chooseLabel="Add Images"
+        cancelLabel="Cancel"
+        uploadLabel="Upload"
+        auto
+      />
+      {/* Display the list of uploaded images */}
+      <div>
+        {images.length > 0 && (
+          <div>
+            <h3>Uploaded Images:</h3>
+            <ul>
+              {images.map((image, index) => (
+                <li key={index}>{image.name}</li> // Display image names
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+    </div>
+   
+                                {/* <Toast ref={toast}></Toast> */}
 
                                 {/* רכיב FileUpload */}
-                                <FileUpload
+                                {/* <FileUpload
                                     mode="basic"
                                     name="demo[]"
                                     url="/api/upload"
@@ -287,19 +348,10 @@ const Rec_AddApartment = (props) => {
                                     // onUpload={onUpload}
                                     auto
                                     chooseLabel="image"
-                                />
+                                /> */}
 
                                 {/* תצוגה מקדימה של התמונה אם נבחרה */}
-                                {imagePreview && (
-                                    <div style={{ marginTop: '20px' }}>
-                                        {/* <h5>תצוגה מקדימה:</h5> */}
-                                        <img
-                                            src={imagePreview}
-                                            alt="תצוגה מקדימה"
-                                            style={{ width: '200px', height: 'auto', borderRadius: '8px' }}
-                                        />
-                                    </div>
-                                )}
+                           
                             </div>
 
                             <br></br>
