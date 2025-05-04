@@ -36,11 +36,11 @@ const Rec_AddApartment = (props) => {
     const decoded = accesstoken ? jwtDecode(accesstoken) : null;
     const [formData, setFormData] = useState({});
     const neighborhoodsData = [
-        'Ramot',
-        'Sanhedria',
-        'Har-Nof',
-        'Romema',
-        'Ramat Shlomo'
+        'רמות',
+        'סנהדריה',
+        'הר נוף',
+        'רוממה',
+        'רמת שלמה'
     ]
     const toast = useRef(null);
 
@@ -119,7 +119,7 @@ const Rec_AddApartment = (props) => {
         } catch (e) {
             
             console.error(e)
-            alert("Add apartment failed")
+            alert("הוספת דירה נכשלה")
         }
     };
 
@@ -192,9 +192,9 @@ const Rec_AddApartment = (props) => {
                 showHeader={false} breakpoints={{ '960px': '80vw' }} style={{ width: '30vw' }}>
                 <div className="flex justify-content-center flex-column pt-6 px-3">
                     <i className="pi pi-check-circle" style={{ fontSize: '5rem', color: 'var(--green-500)' }}></i>
-                    <h5>Add apartment </h5>
+                    <h5>הוספת דירה</h5>
                     <p style={{ lineHeight: 1.5, textIndent: '1rem' }}>
-                        Your apartment added, good lock!
+                        הדירה שלך נוספה, בהצלחה!!!
                         <b>{formData.name}</b> ;
                     </p>
                 </div>
@@ -218,7 +218,7 @@ const Rec_AddApartment = (props) => {
                                             onValueChange={(e) => (field.onChange(e.value),
                                                 setDefaultValues(prevValues => ({ ...prevValues, firstName: e.target.value })))} />
                                     )} />
-                                    <label htmlFor="price">price</label>
+                                    <label htmlFor="price">מחיר</label>
                                 </span>
                                 {getFormErrorMessage('description')}
                             </div>
@@ -232,7 +232,7 @@ const Rec_AddApartment = (props) => {
                                                 setDefaultValues(prevValues => ({ ...prevValues, number_of_rooms: e.target.value })))}
                                         />
                                     )} />
-                                    <label htmlFor="date">number_of_rooms</label>
+                                    <label htmlFor="date">מספר חדרים</label>
                                 </span>
                                 {getFormErrorMessage('number_of_rooms')}
                             </div>
@@ -245,7 +245,7 @@ const Rec_AddApartment = (props) => {
                                                 setDefaultValues(prevValues => ({ ...prevValues, number_of_rooms: e.target.value })))}
                                         />
                                     )} />
-                                    <label htmlFor="date">floor</label>
+                                    <label htmlFor="date">קומה</label>
                                 </span>
                                 {getFormErrorMessage('floor')}
                             </div>
@@ -266,7 +266,7 @@ const Rec_AddApartment = (props) => {
                                             options={neighborhoods}
                                             // optionLabel="name"
                                             showClear
-                                            placeholder="Select a neighborhood"
+                                            placeholder="שכונה"
                                             id={field.name}
                                             className={classNames({ 'p-invalid': fieldState.invalid })}
                                         />
@@ -280,7 +280,7 @@ const Rec_AddApartment = (props) => {
                                     <Checkbox inputId={field.name} onChange={(e) => field.onChange(e.checked)}
                                         checked={field.value} className={classNames({ 'p-invalid': fieldState.invalid })} />
                                 )} />
-                                <label htmlFor="monopolism" className={classNames({ 'p-error': errors.accept })}>monopolism</label>
+                                <label htmlFor="monopolism" className={classNames({ 'p-error': errors.accept })}>בלעדיות </label>
                             </div>
 
 
@@ -289,7 +289,7 @@ const Rec_AddApartment = (props) => {
                                     <Checkbox inputId={field.name} onChange={(e) => field.onChange(e.checked)}
                                         checked={field.value} className={classNames({ 'p-invalid': fieldState.invalid })} />
                                 )} />
-                                <label htmlFor="yad2" className={classNames({ 'p-error': errors.accept })}>yad2</label>
+                                <label htmlFor="yad2" className={classNames({ 'p-error': errors.accept })}>יד 2 </label>
                             </div>
                                                         
                             {/* <Toast ref={toast}></Toast>
@@ -313,16 +313,16 @@ const Rec_AddApartment = (props) => {
         maxFileSize={1000000} // Max file size: 1MB
         onUpload={onUpload}
         onClear={onClear}
-        chooseLabel="Add Images"
-        cancelLabel="Cancel"
-        uploadLabel="Upload"
+        chooseLabel="הוספת תמונות"
+        cancelLabel="ביטול"
+        // uploadLabel="Upload"
         auto
       />
       {/* Display the list of uploaded images */}
       <div>
         {images.length > 0 && (
           <div>
-            <h3>Uploaded Images:</h3>
+            {/* <h3>Uploaded Images:</h3> */}
             <ul>
               {images.map((image, index) => (
                 <li key={index}>{image.name}</li> // Display image names
@@ -367,7 +367,7 @@ const Rec_AddApartment = (props) => {
                                                 setDefaultValues(prevValues => ({ ...prevValues, number_of_rooms: e.target.value })))}
                                         />
                                     )} />
-                                    <label htmlFor="date">description</label>
+                                    <label htmlFor="date">תיאור</label>
                                 </span>
                                 {getFormErrorMessage('description')}
                             </div>
@@ -375,8 +375,8 @@ const Rec_AddApartment = (props) => {
 
                             <br></br>
                             <br></br>
-                            <Button type="button" label="reset" onClick={() => (reset())} className='reset1'></Button>
-                            <Button type="submit" label="send" className="mt-2"
+                            <Button type="button" label="איפוס" onClick={() => (reset())} className='reset1'></Button>
+                            <Button type="submit" label="פרסום" className="mt-2"
 
                             />
 

@@ -93,7 +93,7 @@ const FormLog = (props) => {
             }
         } catch (e) {
             <Alert></Alert>
-            alert("Unauthorized")
+            alert("לא מורשה")
             console.error(e)
             
         }
@@ -129,7 +129,7 @@ useEffect(()=>{
                 
             </Dialog> */}
 
-            <Dialog header="Header" visible={visible} style={{  height: '20vw', width: '20vw', margin: '0', marginTop:'0', padding: '0'}} 
+            <Dialog header="כניסה" visible={visible} style={{  height: '20vw', width: '20vw', margin: '0', marginTop:'0', padding: '0'}} 
             onHide={() => {if (!visible) return; setVisible(false);navigate(`/`) }}>
             <div className="flex justify-content-center" 
            >
@@ -150,7 +150,7 @@ useEffect(()=>{
                                         // placeholder="username"   
                                         onChange={(e) => (field.onChange(e.target.value), setDefaultValues(prevValues => ({ ...prevValues, firstName: e.target.value })))}  />
                                 )} />
-                                <label htmlFor="username" className={classNames({ 'p-error': !!errors.email })}>username*</label>
+                                <label htmlFor="username" className={classNames({ 'p-error': !!errors.email })}>שם משתמש*</label>
                             </span>
                             {getFormErrorMessage('username')}
                         </div>
@@ -160,7 +160,7 @@ useEffect(()=>{
                                 <Controller name="password" control={control} rules={{ required: 'Password is required.' }} render={({ field, fieldState }) => (
                                     <Password id={field.name} {...field} toggleMask className={classNames({ 'p-invalid': fieldState.invalid })}   onChange={(e) => (field.onChange(e.target.value), setDefaultValues(prevValues => ({ ...prevValues, firstName: e.target.value })))}  />
                                 )} />
-                                <label htmlFor="password" className={classNames({ 'p-error': errors.password })}>password*</label>
+                                <label htmlFor="password" className={classNames({ 'p-error': errors.password })}>סיסמה*</label>
                             </span>
                             {getFormErrorMessage('password')}
                         </div>
@@ -169,8 +169,8 @@ useEffect(()=>{
     
                          <br></br>
                          <br></br>
-                         <Button type="button" label="reset" onClick={()=>(reset())} className="reset1" ></Button>
-                         <Button type="submit" label="Sign in" className="mt-2"/>
+                         <Button type="button" label="איפוס" onClick={()=>(reset())} className="reset1" ></Button>
+                         <Button type="submit" label="כניסה" className="mt-2"/>
                         
 
                         

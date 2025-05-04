@@ -16,6 +16,7 @@ const createNewApartment = async (req, res) => {
     // if (!yad2) {
     //     return res.status(400).json({ message: 'yad2 is required' })
     // }
+
     const apartment = await Apartment.create({ number_of_interested, seller_id, images, monopolism, neighborhood, number_of_rooms, floor, price, yad2, description })
     const apartments = await Apartment.find().lean()
     res.json(apartments)

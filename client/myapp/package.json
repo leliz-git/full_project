@@ -23,7 +23,8 @@
     "react-scripts": "^5.0.1",
     "react-textarea-autosize": "^8.5.8",
     "redux": "^5.0.1",
-    "redux-persist": "^6.0.0"
+    "redux-persist": "^6.0.0",
+    "socket.io-client": "^4.8.1"
   },
   "scripts": {
     "serve": "serve -s build",

@@ -7,19 +7,14 @@ import { Password } from "primereact/password";
 import { Checkbox } from "primereact/checkbox";
 import { classNames } from "primereact/utils";
 import { useNavigate } from "react-router-dom";
-import { setToken, logOut } from '../../redux/tokenSlice'
-
+import { setToken, logOut } from '../../redux/tokenSlice';
 import { useDispatch, useSelector } from 'react-redux';
-
-import "./Form.css";
 
 const FormReg = () => {
   const [formData, setFormData] = useState({});
-  const accesstoken=useSelector((state)=>state.token.token)
-
+  const accesstoken = useSelector((state) => state.token.token);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
 
   const defaultValues = {
     name: "",
@@ -42,9 +37,9 @@ const FormReg = () => {
 
       if (res.status === 201) {
         setFormData(data);
-        dispatch(setToken(res.data.accessToken))
+        dispatch(setToken(res.data.accessToken));
         alert("ההרשמה בוצעה בהצלחה!");
-        navigate("/Apartments"); // Navigate to the home page or another page after successful registration
+        navigate("/Apartments");
       }
     } catch (e) {
       if (e.response && e.response.status === 409) {
@@ -63,12 +58,13 @@ const FormReg = () => {
   return (
     <div
       style={{
-        fontFamily: "'Roboto', sans-serif", // Modern and clean font
+        fontFamily: "'Roboto', sans-serif",
         backgroundColor: "#f7f7f7",
         minHeight: "100vh",
         display: "flex",
+        flexDirection: "row-reverse", // מוודא שהרכיבים יתחלפו
         justifyContent: "space-between",
-        alignItems: "center", // Align items vertically in the center
+        alignItems: "center",
         padding: "20px",
         gap: "20px",
       }}
@@ -78,27 +74,25 @@ const FormReg = () => {
         style={{
           display: "flex",
           flexDirection: "column",
-          alignItems: "flex-start", // Align everything to the left
-          justifyContent: "center", // Center vertically
+          alignItems: "flex-start", // מתעלם מ-RTL ומצמיד את התוכן לשמאל
+          justifyContent: "center",
           width: "100%",
           maxWidth: "500px",
-          marginLeft: "20px", // Add space from the left
+          marginRight: "20px", // מרווח מימין במקום משמאל
+          textAlign: "left", // טקסט מיושר לשמאל
         }}
       >
-        {/* Slogan */}
         <h2
           style={{
             color: "#333",
             fontSize: "1.8rem",
             fontWeight: "600",
             marginBottom: "20px",
-            textAlign: "left",
+            textAlign: "left", // טקסט מיושר לשמאל
           }}
         >
           .למכור. לקנות. לגדול. – הכל במקום אחד
         </h2>
-
-        {/* Horizontal Icons and Slogans */}
         <div
           style={{
             display: "flex",
@@ -132,19 +126,15 @@ const FormReg = () => {
           borderRadius: "8px",
           boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
           padding: "20px",
-          textAlign: "right",
-          direction: "rtl", // Ensure everything is aligned to the right
-          alignSelf: "flex-start", // Ensures the form stays at the top
+          textAlign: "right", // נשאר מיושר לימין
+          direction: "rtl", // שומר על RTL עבור אלמנט זה
+          alignSelf: "flex-start",
         }}
       >
-        <h1 style={{ color: "#333", fontSize: "2rem", marginBottom: "20px" }}>
-          {/* הרשמה */}
-        </h1>
+        <h1 style={{ color: "#333", fontSize: "2rem", marginBottom: "20px" }}>הרשמה</h1>
         <p style={{ color: "#555", fontSize: "1rem", marginBottom: "20px" }}>
-            <h1> הי, טוב לראות אותך.</h1>
-           <h3>מלא את הפרטים כדי ליצור חשבון חדש</h3>
-            
-          
+          <h1> הי, טוב לראות אותך.</h1>
+          <h3>מלא את הפרטים כדי ליצור חשבון חדש</h3>
         </p>
         <form onSubmit={handleSubmit(onSubmit)} className="p-fluid">
           <div className="field" style={{ marginBottom: "20px" }}>

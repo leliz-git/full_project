@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 const i={
 token:null
+// user:null
 }
 const tokenSlice = createSlice({
     name: 'token',

@@ -19,6 +19,7 @@ import Alert from './componnents/Auth/Alert'
 import Rec_AddApartment from './componnents/Recourses/Rec_AddApartment';
 import GalleryApartment from './componnents/Broker/GalleryApartment';
 import{setToken,logOut}from './redux/tokenSlice';
+import Chat from './componnents/Chat/chat'
 const LazyAuth = React.lazy(() => import('./componnents/Auth/Auth'))
 const LazyFormDemo = React.lazy(() => import('./componnents/Auth/FormReg'))
 const LazyFormLog = React.lazy(() => import('./componnents/Auth/FormLog'))
@@ -46,12 +47,12 @@ function App() {
     // פריטי התפריט
     const items = [
       {
-        label: token ? 'Logout' : 'Sign In',  // אם יש טוקן, "Logout", אחרת "Sign In"
+        label: token ? 'יציאה' : 'כניסה',  // אם יש טוקן, "Logout", אחרת "Sign In"
         icon: token ? 'pi pi-sign-out' : 'pi pi-user',  // אם יש טוקן, "Logout" אייקון, אחרת "Sign In"
         command: token ? handleLogout : () => navigate('./signin')  // אם יש טוקן, יבוצע Logout אחרת ינווט ל-Sign In
       },
       {
-        label: 'Register',
+        label: 'הרשמה',
         icon: 'pi pi-user-plus',
         command: () => navigate('./register')
       }
@@ -62,7 +63,7 @@ function App() {
     <div className="App">
 
       <Menubar model={items} />
-
+<Chat></Chat>
 <Suspense fallback={<div>Loading...</div>}>
 
     <Routes>

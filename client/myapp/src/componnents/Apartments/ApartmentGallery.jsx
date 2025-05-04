@@ -82,7 +82,7 @@ const openNew = () => {
   const leftToolbarTemplate = () => {
          return (
              <div className="flex flex-wrap gap-2">
-                 <Button label="חדש" icon="pi pi-plus" severity="success" onClick={openNew} />
+                 <Button label="פרסום" icon="pi pi-plus" severity="success" onClick={openNew} />
              </div>
          );
      }; 
@@ -109,7 +109,7 @@ const openNew = () => {
                         <span className="text-2xl font-semibold">{apartment.neighborhood}</span>
                     </div>
                     <div className="flex align-items-center justify-content-between">
-                        <div className="text-2xl ">{apartment.floor} :<b>קומה </b></div>
+                        <div className="text-2xl "> <b>קומה: </b>{apartment.floor}</div>
                         <div className="text-2xl "> <b>מספר חדרים: </b> {apartment.number_of_rooms}</div>
                         <span className="pi pi-eye icon"> { apartment.number_of_interested} </span>
                     </div>
