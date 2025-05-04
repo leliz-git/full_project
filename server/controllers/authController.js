@@ -23,30 +23,48 @@ const login = async (req, res) => {
 }
 
 const register = async (req, res) => {
-    const { roles, username, password, name, email, phone } = req.body
-    console.log(req.body)
+    const { roles, username, password, name, email, phone } = req.body;
     if (!username || !password || !email) {
-        return res.status(400).json({ message: 'All fields are required' })
+        return res.status(400).json({ message: 'All fields are required' });
     }
-    const duplicate = await User.findOne({ username: username }).lean()
+
+    // בדיקת שם משתמש כפול
+    const duplicate = await User.findOne({ username: username }).lean();
     if (duplicate) {
-        return res.status(409).json({ message: "Duplicate username" })
+        return res.status(409).json({ message: 'Duplicate username' });
     }
-    
-    const hashedPwd = await bcrypt.hash(password, 10)
-    const userObject = { roles, name, email, username, phone, password: hashedPwd }
-    const user = await User.create(userObject)
-    
+
+    // הצפנת סיסמה
+    let hashedPwd;
+    try {
+        hashedPwd = await bcrypt.hash(password, 10);
+    } catch (error) {
+        return res.status(500).json({ message: 'Error hashing password' });
+    }
+
+    // יצירת משתמש חדש
+    const userObject = { roles, name, email, username, phone, password: hashedPwd };
+    let user;
+    try {
+        user = await User.create(userObject);
+    } catch (error) {
+        return res.status(500).json({ message: 'Error creating user', error: error.message });
+    }
+
+    // יצירת Access Token
     if (user) {
-        
-        return res.status(201).json({
-            message: `New user ${user.username} created`
-            
-        })
+        const userInfo = {
+            _id: user._id,
+            name: user.name,
+            roles: user.roles,
+            username: user.username,
+        };
+        const accessToken = jwt.sign(userInfo, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
+        return res.status(201).json({ accessToken: accessToken, user: userInfo });
     } else {
-        return res.status(400).json({ message: 'Invalid user received' })
+        return res.status(500).json({ message: 'Invalid user received' });
     }
-}
+};
 
 
 const Broker_register = async (req, res) => {
