@@ -1,8 +1,7 @@
 const Apartment = require("../models/Apartments")
 
 const createNewApartment = async (req, res) => {
-    // if(req.broker_bool===true)//אם הדירה טופלה
-    //     apartment.broker_bool=true
+   
     const { number_of_interested, seller_id, images, monopolism, neighborhood, number_of_rooms, floor, price, yad2, description } = req.body
     if (!neighborhood) {
         return res.status(400).json({ message: 'neighborhood is required' })
@@ -23,7 +22,7 @@ const createNewApartment = async (req, res) => {
 }
 
 const getAllApartmentByBroker = async (req, res) => {
-    
+
     // const apartments = await Apartment.find(broker_bool===true).lean()//יש פה בעיה
     const apartments = await Apartment.find({ 'broker_bool': false }).lean();
     if (!apartments?.length)
@@ -33,18 +32,17 @@ const getAllApartmentByBroker = async (req, res) => {
 }//כדי שיראה את זה באיזור האישי שלו
 
 const getAllApartment = async (req, res) => {
-    
-    const apartments = await Apartment.find({'broker_bool': true}).lean()
-    if (!apartments?.length)
-    {
+
+    const apartments = await Apartment.find({ 'broker_bool': true }).lean()
+    if (!apartments?.length) {
         return res.status(400).json({ message: 'No apartments found' })
     }
     res.json(apartments)
 
 }//שכל מי שנכנס לאתר יראה
-const CompleteApartment = async (req,res)=>{
+const CompleteApartment = async (req, res) => {
     console.log("!!")
-    const{_id} = req.body
+    const { _id } = req.body
     if (!_id) {
         // console.log("!")
         return res.status(400).json({ message: 'id is required' })
@@ -55,7 +53,7 @@ const CompleteApartment = async (req,res)=>{
         // console.log("?")
         return res.status(400).json({ message: 'apartment not found' })
     }
-    apartment.broker_bool=!apartment.broker_bool;
+    apartment.broker_bool = !apartment.broker_bool;
     const updateApartment = await apartment.save()
     const apartments = await Apartment.find().lean()
     console.log("!")
@@ -64,7 +62,7 @@ const CompleteApartment = async (req,res)=>{
 
 const updateApartment = async (req, res) => {
     // const { _id } = req.params
-    const {_id, monopolism, neighborhood, number_of_rooms, floor, price, yad2, description, images, broker_bool, bought } = req.body
+    const { _id, monopolism, neighborhood, number_of_rooms, floor, price, yad2, description, images, broker_bool, bought } = req.body
 
     if (!_id) {
         // console.log("!")
@@ -103,14 +101,14 @@ const updateNumofIntrest = async (req, res) => {
     }
 
     apartment.number_of_interested = apartment.number_of_interested + 1
-    
+
 }
 
 const deleteApartment = async (req, res) => {
     const { _id } = req.body
     // const { id } = req.params
     const apartment = await Apartment.findById(_id).exec()
-    
+
     if (!apartment) {
         return res.status(400).json({ message: 'Apartment not found' })
     }
@@ -120,22 +118,22 @@ const deleteApartment = async (req, res) => {
 }
 
 const getApartmentById = async (req, res) => {//לבדוק אם צריך middleware
-    
+
     // updateNumofIntrest(id)
-    
+
     const { _id } = req.params
     // updateNumofIntrest(_id)
-    const apartment = await Apartment.findById(_id).lean()
-
+    const apartment = await Apartment.findById(_id).exec()
+    
     if (!apartment) {
         return res.status(400).json({ message: 'No apartment found' })
     }
-    apartment.number_of_interested += 1;
-    
-    
+    apartment.number_of_interested = apartment.number_of_interested + 1;
+    const updateApartment =  await apartment.save();
+
     console.log(apartment)
     res.json(apartment)
 }
 
-module.exports = { createNewApartment, getAllApartment,CompleteApartment, updateApartment, updateNumofIntrest, deleteApartment, getApartmentById, getAllApartmentByBroker }
+module.exports = { createNewApartment, getAllApartment, CompleteApartment, updateApartment, updateNumofIntrest, deleteApartment, getApartmentById, getAllApartmentByBroker }
 

@@ -35,6 +35,7 @@ const ApartmentGallery =() =>{
     const navigate = useNavigate();
  
     useEffect(() => {
+        
         const fetchApartments = async () => {
             try {
                 const response = await axios({

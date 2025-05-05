@@ -19,6 +19,9 @@ import { useSelector } from 'react-redux'; // ייבוא useSelector
 import { jwtDecode } from 'jwt-decode';
 import { FileUpload } from 'primereact/fileupload';
 import { Toast } from 'primereact/toast';
+import { useDispatch } from 'react-redux';
+import { setToken, logOut } from '../../redux/tokenSlice'
+
 
 
 import './Rec_AddApartment.css';
@@ -33,6 +36,7 @@ const Rec_AddApartment = (props) => {
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [images, setImages] = useState([]);
     const accesstoken = useSelector((state) => state.token.token);
+    const user = useSelector((state) => state.token.user);
     const decoded = accesstoken ? jwtDecode(accesstoken) : null;
     const [formData, setFormData] = useState({});
     const neighborhoodsData = [
@@ -47,7 +51,7 @@ const Rec_AddApartment = (props) => {
     const [neighborhoods, setNeighborhoods] = useState([]);
     const [selectedNeighborhood, setSelectedNeighborhood] = useState(null);
 
-
+    const dispatch = useDispatch();
     const [data, setData] = useState([]);
     const [error, setError] = useState(null);
 
@@ -81,6 +85,9 @@ const Rec_AddApartment = (props) => {
     const { control, formState: { errors }, handleSubmit, reset } = useForm({ defaultValues });
 
     const onSubmit = async (data) => {
+        const payload = {
+            ...data,
+            images}
         // debugger
         try {
 
@@ -92,7 +99,7 @@ const Rec_AddApartment = (props) => {
                     url: 'http://localhost:7002/api/apartments/add',
                     headers: { Authorization: "Bearer " + accesstoken },
                     data: {
-                        images: imagePreview,
+                        images: images,
                         monopolism: data.monopolism,
                         neighborhood: data.neighborhood,
                         number_of_rooms: data.number_of_rooms,
@@ -107,9 +114,19 @@ const Rec_AddApartment = (props) => {
 
             if (res.status === 200) {
                
+               if(user.roles==="Broker")
+               {
                 const apartments=res.data.filter(apartment=>apartment.broker_bool===false)
                 props.setApartments(apartments);
                 setShowMessage(true)
+               }
+               else if (user.roles==="Seller" || user.roles==="Buyer")
+               {
+                const apartments=res.data.filter(apartment=>apartment.broker_bool===true)
+                props.setApartments(apartments);
+                setShowMessage(true)
+               }
+                
                 //  props.setVisible(false);
             }
 
@@ -162,19 +179,43 @@ const Rec_AddApartment = (props) => {
     //     })
     // }
     
-
+    const onUpload = async (event) => {
+        const uploadedFiles = event.files;
+    
+        // Create FormData object
+        const formData = new FormData();
+        uploadedFiles.forEach((file) => formData.append('images[]', file));
+    
+        try {
+          const res = await axios.post('http://localhost:7002/api/upload', formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          });
+    
+          const uploadedImageUrls = res.data.map((file) => file.url);
+          
+          setImages((prevImages) => [...prevImages, ...uploadedImageUrls]);
+        } catch (error) {
+          console.error('Upload failed:', error);
+        }
+      };
+    
+      // Function to handle form submission
+      
+    
     // Function to handle file upload
-    const onUpload = (event) => {
-      const uploadedFiles = event.files || []; // Ensure event.files exists
-      setImages((prevImages) => {
-        // Check for duplicates based on file name
-        const newFiles = uploadedFiles.filter(
-          (uploadedFile) => !prevImages.some((image) => image.name === uploadedFile.name)
-        );
-        return [...prevImages, ...newFiles];
-      });
-      console.log('Uploaded images:', uploadedFiles);
-    };
+    // const onUpload = (event) => {
+    //   const uploadedFiles = event.files || []; // Ensure event.files exists
+    //   setImages((prevImages) => {
+    //     // Check for duplicates based on file name
+    //     const newFiles = uploadedFiles.filter(
+    //       (uploadedFile) => !prevImages.some((image) => image.name === uploadedFile.name)
+    //     );
+    //     return [...prevImages, ...newFiles];
+    //   });
+    //   console.log('Uploaded images:', uploadedFiles);
+    // };
   
     // Function to clear all uploaded images
     const onClear = () => {
@@ -307,7 +348,7 @@ const Rec_AddApartment = (props) => {
     <div>
       <FileUpload
         name="images[]"
-        url="/api/upload" // Replace with the correct API endpoint
+        url="http://localhost:7002/api/upload" // Replace with the correct API endpoint
         multiple // Allow selecting multiple files
         accept="image/*" // Accept only image files
         maxFileSize={1000000} // Max file size: 1MB

@@ -5,7 +5,8 @@ const express = require("express");
 const cors = require("cors");
 const corsOptions = require("./config/corsOptions");
 const connectDB = require("./config/dbConn");
-
+const multer = require('multer');
+const path = require('path');
 const PORT = process.env.PORT || 7001;
 const app = express();
 
@@ -37,6 +38,33 @@ io.on("connection", (socket) => {
 });
 
 app.use(cors(corsOptions));
+
+
+
+
+// Configure Multer for file storage
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/'); // Folder to store uploaded images
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${Date.now()}-${file.originalname}`); // Create unique file names
+  },
+});
+const upload = multer({ storage });
+
+// API endpoint to handle file uploads
+app.post('/api/upload', upload.array('images[]', 10), (req, res) => {
+  const files = req.files.map((file) => ({
+    url: `http://localhost:7002/uploads/${file.filename}`, // Construct file URL
+  }));
+  res.status(200).json(files); // Send back the URLs of the uploaded files
+});
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // Serve uploaded files
+
+
+
 app.use(express.json());
 app.use(express.static("public"));
 

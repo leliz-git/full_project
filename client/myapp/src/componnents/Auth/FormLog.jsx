@@ -68,7 +68,7 @@ const FormLog = (props) => {
             )
             if (res.status === 200) {
                 console.log(res.data);
-                dispatch(setToken(res.data.accessToken))
+                dispatch(setToken({token:res.data.accessToken,user:res.data.user}))
                 console.log(res.data.accessToken);
                 setFormData(data);
                 setShowMessage(true);

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState ,useRef} from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from 'primereact/button';
 import { Galleria } from 'primereact/galleria';
@@ -8,22 +8,23 @@ const ApartmentDetails = () => {
   const { _id } = useParams();
   const navigate = useNavigate();
   const [apartment, setApartment] = useState(null);
+  const isFetching = useRef(false);
 
-  useEffect(() => {
-    const fetchApartment = async () => {
+const fetchApartment = async () => {
       try {
         const response = await axios.get(`http://localhost:7002/api/apartments/getbyid/${_id}`);
         setApartment(response.data);
+
       } catch (error) {
         console.error('Error fetching apartment details:', error);
       }
     };
-
-    if (_id) {
+  useEffect(() => {
+    if (!apartment && !isFetching.current) {
+      isFetching.current = true;
       fetchApartment();
-    }
-  }, [_id]);
-
+    }}, [_id]);
+  
   const responsiveOptions = [
     { breakpoint: '991px', numVisible: 4 },
     { breakpoint: '767px', numVisible: 3 },
@@ -59,22 +60,23 @@ const ApartmentDetails = () => {
       {/* Apartment Details Section */}
       <div className="text-center mb-4">
         {images.length > 0 && (
+
           <Galleria
             value={images}
             responsiveOptions={responsiveOptions}
             numVisible={5}
             style={{ maxWidth: '800px', margin: '0 auto', borderRadius: '10px', overflow: 'hidden', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}
-            item={(item) => (
-              <img
-                src={item}
-                alt="Apartment"
-                style={{
-                  width: '100%',
-                  maxHeight: '400px',
-                  objectFit: 'cover',
-                }}
-              />
-            )}
+            // item={(item) => (
+            //   <img
+            //     src={item}
+            //     alt="Apartment"
+            //     style={{
+            //       width: '100%',
+            //       maxHeight: '400px',
+            //       objectFit: 'cover',
+            //     }}
+            //   />
+            // )}
             thumbnail={(item) => (
               <img
                 src={item}

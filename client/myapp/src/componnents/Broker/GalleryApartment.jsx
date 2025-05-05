@@ -262,7 +262,12 @@ const GalleryApartment = () => {
     };
 
     const imageBodyTemplate = (rowData) => {
-        return <img src={`${rowData.images}`} alt={rowData.images} className="shadow-2 border-round" style={{ width: '64px' }} />;
+       return  <div>{
+       rowData.images.map((url, index) => (
+
+         <img src={`${url}`} alt={url} className="shadow-2 border-round" style={{ width: '64px' }} />
+    ))}
+</div>
     };
 // src={`https://primefaces.org/cdn/primereact/images/Apartment/${rowData.image}`}
     const priceBodyTemplate = (rowData) => {

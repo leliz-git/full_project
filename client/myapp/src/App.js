@@ -39,7 +39,9 @@ function App() {
     const dispatch = useDispatch();
  
     // מצב הלוגין נשמר ב-Redux, בודק אם יש טוקן
-    const token = useSelector(state => state.token.token);
+    const {token} = useSelector(state => state.token);
+    const {user} = useSelector(state => state.token);
+
     const handleLogout = () => {
       dispatch(logOut());  // הסרת הטוקן מה-Redux
       navigate('/');  // ניווט לעמוד ה-signin לאחר התנתקות
@@ -57,13 +59,17 @@ function App() {
         command: () => navigate('./register')
       }
     ];
-  
+    const end = (
+      <div className="flex align-items-center gap-2">
+              {user?.name?<a>hi  {user?.name}</a>:<></>}      
+      </div>
+  );
   
   return(
     <div className="App">
 
-      <Menubar model={items} />
-<Chat></Chat>
+      <Menubar model={items} end={end} />
+      {/* <Chat></Chat> */}
 <Suspense fallback={<div>Loading...</div>}>
 
     <Routes>
