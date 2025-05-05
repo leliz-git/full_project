@@ -20,6 +20,7 @@ import Rec_AddApartment from './componnents/Recourses/Rec_AddApartment';
 import GalleryApartment from './componnents/Broker/GalleryApartment';
 import{setToken,logOut}from './redux/tokenSlice';
 import Chat from './componnents/Chat/chat'
+
 const LazyAuth = React.lazy(() => import('./componnents/Auth/Auth'))
 const LazyFormDemo = React.lazy(() => import('./componnents/Auth/FormReg'))
 const LazyFormLog = React.lazy(() => import('./componnents/Auth/FormLog'))
@@ -61,7 +62,7 @@ function App() {
     ];
     const end = (
       <div className="flex align-items-center gap-2">
-              {user?.name?<a>hi  {user?.name}</a>:<></>}      
+              {user?.name?<a><b>שלום</b>  {user?.name}</a>:<></>}      
       </div>
   );
   
@@ -70,11 +71,13 @@ function App() {
 
       <Menubar model={items} end={end} />
       {/* <Chat></Chat> */}
+ 
 <Suspense fallback={<div>Loading...</div>}>
 
     <Routes>
     <Route path="/" element={<LazyApartmentsGalery ></LazyApartmentsGalery>} />
     <Route path="/apartment/:_id" element={<LazyApartmentsDetails ></LazyApartmentsDetails>} />
+    <Route path="/chat" element={<Chat />} />
         <Route path="/signin" element={<LazyFormLog />} />
         <Route path="/register" element={<LazyFormDemo />} />
         <Route path="/add-apartment" element={<LazyRecourse />} />

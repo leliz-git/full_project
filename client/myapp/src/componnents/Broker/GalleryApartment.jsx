@@ -19,6 +19,7 @@ import { Tag } from 'primereact/tag';
 import Rec_AddApartment from '../Recourses/Rec_AddApartment';
 import Rec_UpdateApartment from '../Recourses/Rec_UpdateApartment';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const GalleryApartment = () => {
@@ -46,6 +47,8 @@ const GalleryApartment = () => {
     const [selectedApartments, setSelectedApartments] = useState(null);
     const [submitted, setSubmitted] = useState(false);
     const [globalFilter, setGlobalFilter] = useState(null);
+     const navigate = useNavigate();
+     
     const toast = useRef(null);
     const dt = useRef(null);
 
@@ -251,23 +254,30 @@ const GalleryApartment = () => {
     const leftToolbarTemplate = () => {
         return (
             <div className="flex flex-wrap gap-2">
-                <Button label="New" icon="pi pi-plus" severity="success" onClick={openNew} />
+                <Button label="פרסום" icon="pi pi-plus" severity="success" onClick={openNew} />
                 {/* <Button label="Delete" icon="pi pi-trash" severity="danger" onClick={confirmDeleteSelected} disabled={!selectedApartments || !selectedApartments.length} /> */}
             </div>
         );
     };
 
     const rightToolbarTemplate = () => {
-        return <Button label="Export" icon="pi pi-upload" className="p-button-help" onClick={exportCSV} />;
+        return <Button label="יצוא" icon="pi pi-upload" className="p-button-help" onClick={exportCSV} />;
     };
 
     const imageBodyTemplate = (rowData) => {
-       return  <div>{
-       rowData.images.map((url, index) => (
-
-         <img src={`${url}`} alt={url} className="shadow-2 border-round" style={{ width: '64px' }} />
-    ))}
-</div>
+        return (
+            <div>
+                {rowData.images?.map((url, index) => (
+                    <img
+                        key={index} // Adding a key for better React rendering
+                        src={`${url}`}
+                        alt={url}
+                        className="shadow-2 border-round"
+                        style={{ width: '64px' }}
+                    />
+                )) || <></>} {/* Handle the case when images are not available */}
+            </div>
+        );
     };
 // src={`https://primefaces.org/cdn/primereact/images/Apartment/${rowData.image}`}
     const priceBodyTemplate = (rowData) => {
@@ -285,10 +295,17 @@ const GalleryApartment = () => {
     const actionBodyTemplate = (rowData) => {
         return (
             <React.Fragment>
+                <Button icon="pi pi-trash" rounded outlined severity="danger" onClick={() => confirmDeleteApartment(rowData)} />
                 <Button icon="pi pi-upload" rounded outlined className="mr-2" onClick={() => confirmCompleteApartment(rowData)} />
                 <Button icon="pi pi-pencil" rounded outlined className="mr-2" onClick={() => editApartment(rowData)} />
-                <Button icon="pi pi-trash" rounded outlined severity="danger" onClick={() => confirmDeleteApartment(rowData)} />
-                
+                <Button 
+                    icon="pi pi-comments" 
+                    rounded 
+                    outlined 
+                    className="mr-2" 
+                    tooltip="פתח צ'אט" 
+                    onClick={() => navigate(`/chat?apartmentId=${rowData._id}`)} // ניווט לצ'אט עם מזהה הדירה
+                />
             </React.Fragment>
         );
     };
@@ -314,7 +331,7 @@ const GalleryApartment = () => {
             <h4 className="m-0"></h4>
             <IconField iconPosition="left">
                 <InputIcon className="pi pi-search" />
-                <InputText type="search" onInput={(e) => setGlobalFilter(e.target.value)} placeholder="Search..." />
+                <InputText type="search" onInput={(e) => setGlobalFilter(e.target.value)} placeholder="חיפוש..." />
             </IconField>
         </div>
     );
@@ -347,13 +364,13 @@ const GalleryApartment = () => {
                     paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} Apartments" globalFilter={globalFilter} header={header}>
                     <Column selectionMode="multiple" exportable={false}></Column>
-                    <Column field="price" header="price" body={priceBodyTemplate} ></Column>
-                    <Column field="neighborhood" header="neighborhood" ></Column>
-                    <Column field="images" header="Image" body={imageBodyTemplate}></Column>
-                    <Column field="number_of_rooms" header="number of rooms"  ></Column>
-                    <Column field="floor" header="floor" ></Column>
-                    <Column field="number_of_interested" header="number of interests" ></Column>
-                    <Column field="description" header="description" ></Column>
+                    <Column field="price" header="מחיר" body={priceBodyTemplate} ></Column>
+                    <Column field="neighborhood" header="שכונה" ></Column>
+                    <Column field="images" header="תמונות" body={imageBodyTemplate}></Column>
+                    <Column field="number_of_rooms" header="מספר חדרים"  ></Column>
+                    <Column field="floor" header="קומה" ></Column>
+                    <Column field="number_of_interested" header="מספר מתעניינים" ></Column>
+                    <Column field="description" header="תיאור" ></Column>
                     {/*<Column field="_id" header="_id" ></Column>
                     {/* <Column field="inventoryStatus" header="Status" sortable style={{ minWidth: '12rem' }}></Column> */}
                     <Column body={actionBodyTemplate} exportable={false} style={{ minWidth: '12rem' }}></Column>
