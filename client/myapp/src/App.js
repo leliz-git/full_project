@@ -8,7 +8,7 @@ import './index.css';
 import './flags.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch , useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 // import { Link, Route, Routes } from 'react-router-dom'
 import { Suspense, useState } from 'react';
 import React from 'react';
@@ -18,7 +18,7 @@ import FormReg from './componnents/Auth/FormReg';
 import Alert from './componnents/Auth/Alert'
 import Rec_AddApartment from './componnents/Recourses/Rec_AddApartment';
 import GalleryApartment from './componnents/Broker/GalleryApartment';
-import{setToken,logOut}from './redux/tokenSlice';
+import { setToken, logOut } from './redux/tokenSlice';
 import Chat from './componnents/Chat/chat'
 import { jwtDecode } from 'jwt-decode';
 
@@ -26,77 +26,113 @@ const LazyAuth = React.lazy(() => import('./componnents/Auth/Auth'))
 const LazyFormDemo = React.lazy(() => import('./componnents/Auth/FormReg'))
 const LazyFormLog = React.lazy(() => import('./componnents/Auth/FormLog'))
 const LazyRecourse = React.lazy(() => import('./componnents/Recourses/Rec_AddApartment'))
-const LazyB_Recourse = React.lazy(() => import('./componnents/Broker/B_Recourses'))
+// const LazyB_Recourse = React.lazy(() => import('./componnents/Broker/B_Recourses'))
 const LazyApartments = React.lazy(() => import('./componnents/Broker/GalleryApartment'))
-const LazyApartmentsGalery = React.lazy(()=>import('./componnents/Apartments/ApartmentGallery'))
-const LazyApartmentsDetails = React.lazy(()=>import('./componnents/Apartments/ApartmentDetails'))
+const LazyApartmentsGalery = React.lazy(() => import('./componnents/Apartments/ApartmentGallery'))
+const LazyApartmentsDetails = React.lazy(() => import('./componnents/Apartments/ApartmentDetails'))
 
 
 
 function App() {
   const navigate = useNavigate();
   const [visible, setVisible] = useState(false)
-    const [visible1, setVisible1] = useState(false)
-    const [visible2, setVisible2] = useState(false)
-    const dispatch = useDispatch();
-    const accesstoken=useSelector((state)=>state.token.token)
+  const [visible1, setVisible1] = useState(false)
+  const [visible2, setVisible2] = useState(false)
+  const dispatch = useDispatch();
 
-    const decoded = accesstoken ? jwtDecode(accesstoken) : null;
 
-    // מצב הלוגין נשמר ב-Redux, בודק אם יש טוקן
-    const {token} = useSelector(state => state.token);
-    // const {user} = useSelector(state => state.token);
 
-    const handleLogout = () => {
-      dispatch(logOut());  // הסרת הטוקן מה-Redux
-      navigate('/');  // ניווט לעמוד ה-signin לאחר התנתקות
-    };
-    // פריטי התפריט
-    const items = [
-      {
-        label: token ? 'יציאה' : 'כניסה',  // אם יש טוקן, "Logout", אחרת "Sign In"
-        icon: token ? 'pi pi-sign-out' : 'pi pi-user',  // אם יש טוקן, "Logout" אייקון, אחרת "Sign In"
-        command: token ? handleLogout : () => navigate('./signin')  // אם יש טוקן, יבוצע Logout אחרת ינווט ל-Sign In
-      },
-      {
-        label: 'הרשמה',
-        icon: 'pi pi-user-plus',
-        command: token ? handleLogout :() => navigate('./register')
-      }
-    ];
-    const end = (
-      <div className="flex align-items-center gap-2">
-              {decoded?.name?<a><b>שלום</b>  {decoded.name}</a>:<></>}      
-      </div>
+
+  // useEffect(() => {
+  //     if (decoded) {
+  //         console.log("Decoded token:", decoded);
+  //     } else {
+  //         console.log("Invalid or missing access token.");
+  //     }
+  // }, [accesstoken]);
+
+  // מצב הלוגין נשמר ב-Redux, בודק אם יש טוקן
+
+  // if (res.status === 200) {
+  //   console.log("Login successful:", res.data);
+  //   dispatch(setToken({ token: res.data.accessToken }));
+
+  //   // פענוח הטוקן החדש
+  //   const newDecoded = jwtDecode(res.data.accessToken);
+  //   console.log("New Decoded token:", newDecoded);
+
+  //   if (newDecoded.roles === "Broker") {
+  //       navigate(`/MyApartments`);
+  //   } else if (newDecoded.roles === "Buyer" || newDecoded.roles === "Seller") {
+  //       navigate(`/Apartments`);
+  //       setVisible(false);
+  //   }
+
+  const token = useSelector((state) => state.token.token)
+  const newDecoded=jwtDecode(token)
+//   let decoded = null;
+
+// if (token && typeof token === 'string') {
+//     try {
+//         decoded = jwtDecode(token);
+//     } catch (error) {
+//         console.error("Error decoding token:", error.message);
+//     }
+// } else {
+//     console.error("Invalid or missing token.");
+// }
+  // const {user} = useSelector(state => state.token);
+
+  const handleLogout = () => {
+    dispatch(logOut());  // הסרת הטוקן מה-Redux
+    navigate('/');  // ניווט לעמוד ה-signin לאחר התנתקות
+  };
+  // פריטי התפריט
+  const items = [
+    {
+      label: token ? 'יציאה' : 'כניסה',  // אם יש טוקן, "Logout", אחרת "Sign In"
+      icon: token ? 'pi pi-sign-out' : 'pi pi-user',  // אם יש טוקן, "Logout" אייקון, אחרת "Sign In"
+      command: token ? handleLogout : () => navigate('./signin')  // אם יש טוקן, יבוצע Logout אחרת ינווט ל-Sign In
+    },
+    {
+      label: 'הרשמה',
+      icon: 'pi pi-user-plus',
+      command: token ? handleLogout : () => navigate('./register')
+    }
+  ];
+  const end = (
+    <div className="flex align-items-center gap-2">
+      {newDecoded && newDecoded.name ? <a><b>שלום  {newDecoded.name}</b></a> : <></>}
+    </div>
   );
-  
-  return(
+
+  return (
     <div className="App">
 
       <Menubar model={items} end={end} />
       {/* <Chat></Chat> */}
- 
-<Suspense fallback={<div>Loading...</div>}>
 
-    <Routes>
-    <Route path="/" element={<LazyApartmentsGalery ></LazyApartmentsGalery>} />
-    <Route path="/apartment/:_id" element={<LazyApartmentsDetails ></LazyApartmentsDetails>} />
-    <Route path="/chat" element={<Chat />} />
-        <Route path="/signin" element={<LazyFormLog />} />
-        <Route path="/register" element={<LazyFormDemo />} />
-        <Route path="/add-apartment" element={<LazyRecourse />} />
-        <Route path='/MyApartments' element={<Suspense fallback="loading..."><LazyApartments /></Suspense>} />
-        <Route path='/Apartments' element={<Suspense fallback="loading..."><LazyApartmentsGalery /></Suspense>} />
-    </Routes>
-</Suspense>
-{/* </Router> */}
+      <Suspense fallback={<div>Loading...</div>}>
+
+        <Routes>
+          <Route path="/" element={<LazyApartmentsGalery ></LazyApartmentsGalery>} />
+          <Route path="/apartment/:_id" element={<LazyApartmentsDetails ></LazyApartmentsDetails>} />
+          <Route path="/chat" element={<Chat />} />
+          <Route path="/signin" element={<LazyFormLog />} />
+          <Route path="/register" element={<LazyFormDemo />} />
+          <Route path="/add-apartment" element={<LazyRecourse />} />
+          <Route path='/MyApartments' element={ <LazyApartments />} />
+          <Route path='/Apartments' element={ <LazyApartmentsGalery />} />
+        </Routes>
+      </Suspense>
+      {/* </Router> */}
       {/* <Route path='/' element={<Suspense fallback="loading..."><LazyAuth /></Suspense>} />
       <Route path='/Register' element={<Suspense fallback="loading..."><LazyFormDemo /></Suspense>} />
       <Route path='/Recourse' element={<Suspense fallback="loading..."><LazyRecourse /></Suspense>} />
       <Route path='/Personal' element={<Suspense fallback="loading..."><LazyB_Recourse /></Suspense>} /> */}
       {/* <Route path='/Apartments' element={<Suspense fallback="loading..."><LazyApartments /></Suspense>} /> */}
-      
-    
+
+
     </div>
   )
 

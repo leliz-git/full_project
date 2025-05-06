@@ -1,18 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from 'primereact/button';
-import { DataView, DataViewLayoutOptions } from 'primereact/dataview';
-import { Rating } from 'primereact/rating';
-import { Tag } from 'primereact/tag';
-import { classNames } from 'primereact/utils';
+import { DataView } from 'primereact/dataview';
 import { InputText } from 'primereact/inputtext';
 import { InputNumber } from 'primereact/inputnumber';
 import { Dialog } from 'primereact/dialog';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Toolbar } from 'primereact/toolbar';
-import { PrimeIcons } from 'primereact/api';
-
+import { Menubar } from 'primereact/menubar';
 import Rec_AddApartment from '../Recourses/Rec_AddApartment';
 
 const ApartmentGallery = () => {
@@ -59,7 +54,7 @@ const ApartmentGallery = () => {
         };
 
         fetchApartments();
-    }, [accesstoken, filteredApartments]);
+    }, [accesstoken]);
 
     const formatCurrency = (value) => {
         const rounded = Math.round(value);
@@ -73,14 +68,18 @@ const ApartmentGallery = () => {
         setApartmentDialog(true);
     };
 
-    const leftToolbarTemplate = () => {
-        return (
-            <div className="flex flex-wrap gap-2">
-                <Button label="פרסום" icon="pi pi-plus" severity="success" onClick={openNew} />
-                <Button label="חפש" icon="pi pi-search" onClick={() => setSearchDialogVisible(true)} />
-            </div>
-        );
-    };
+    const menuItems = [
+        {
+            label: 'פרסום',
+            icon: 'pi pi-plus',
+            command: () => openNew(),
+        },
+        {
+            label: 'חיפוש',
+            icon: 'pi pi-search',
+            command: () => setSearchDialogVisible(true),
+        }
+    ];
 
     const hideDialog = () => {
         setSubmitted(false);
@@ -163,7 +162,7 @@ const ApartmentGallery = () => {
 
     return (
         <div className="card">
-            <Toolbar className="mb-4" left={leftToolbarTemplate}></Toolbar>
+            <Menubar model={menuItems} />
             <DataView value={filteredApartments} layout={layout} itemTemplate={gridItem} />
 
             <Dialog

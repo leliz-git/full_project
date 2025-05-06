@@ -26,7 +26,6 @@ import { jwtDecode } from 'jwt-decode';
 const FormLog = (props) => {
     const accesstoken=useSelector((state)=>state.token.token)
     const [visible,setVisible]= useState(true);
-
     const [showMessage, setShowMessage] = useState(false);
     const [formData, setFormData] = useState({});
     const[user,setUser]=useState("");
@@ -54,60 +53,40 @@ const FormLog = (props) => {
     const { control, formState: { errors }, handleSubmit, reset } = useForm({ defaultValues });
    
     
-    const onSubmit = async(data) => {
-// debugger
+    const onSubmit = async (data) => {
         try {
             console.log(data);
-
-            const res = await axios(
-                {
-                    method:'POST',
-                    url:'http://localhost:7002/api/auth/login',
-                    
-                    data:{
-                        username:data.username,
-                        password:data.password
-                    },
-                    headers:{}
-                    
-                }
-            )
+    
+            const res = await axios({
+                method: 'POST',
+                url: 'http://localhost:7002/api/auth/login',
+                data: {
+                    username: data.username,
+                    password: data.password,
+                },
+            });
+    
             if (res.status === 200) {
-                console.log(res.data);
-                dispatch(setToken({token:res.data.accessToken}))
-                console.log(res.data.accessToken);
-                setFormData(data);
-                setShowMessage(true);
-                console.log(res);
-                // setUser(res.data.user);  
-                
-                
-                // navigate(`/Apartments/${userId}`)///////
-                if(decoded.roles==="Broker")
-                {
-                    navigate(`/MyApartments`)
+                console.log("Login successful:", res.data);
+                dispatch(setToken({ token: res.data.accessToken }));
+    
+                // פענוח הטוקן החדש
+                const newDecoded = jwtDecode(res.data.accessToken);
+                console.log("New Decoded token:", newDecoded);
+    
+                if (newDecoded.roles === "Broker") {
+                    navigate(`/MyApartments`);
+                } else if (newDecoded.roles === "Buyer" || newDecoded.roles === "Seller") {
+                    navigate(`/Apartments`);
+                    setVisible(false);
                 }
-                else if(decoded.roles==="Buyer" || decoded.roles==="Seller")
-                {
-                <Alert msg={"שלום"}></Alert>
-                    navigate(`/Apartments`)
-                    
-                    // alert("Hi user")
-                    setVisible(false)
-                }
-            }
-            else{
-                
+            } else {
+                console.error("Unexpected status code:", res.status);
             }
         } catch (e) {
-            <Alert msg={"לא מורשה"}></Alert>
-            // alert("לא מורשה")
-            console.error(e)
-            
+            console.error("Error during login:", e.message);
+            alert("לא מורשה");
         }
-    
-
-    
     };
 
     const getFormErrorMessage = (name) => {
