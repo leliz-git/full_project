@@ -43,45 +43,22 @@ function App() {
 
 
 
-  // useEffect(() => {
-  //     if (decoded) {
-  //         console.log("Decoded token:", decoded);
-  //     } else {
-  //         console.log("Invalid or missing access token.");
-  //     }
-  // }, [accesstoken]);
+ 
+  const accesstoken=useSelector((state)=>state.token.token)
+console.log(accesstoken)
+let decoded = null;
 
-  // מצב הלוגין נשמר ב-Redux, בודק אם יש טוקן
+if (accesstoken.token && typeof accesstoken.token === 'string') {
+    try {
+        decoded = jwtDecode(accesstoken.token);
+        console.log("Decoded token:", decoded);
+    } catch (error) {
+        console.error("Error decoding token:", error.message);
+    }
+} else {
+    console.error("Invalid or missing token.");
+}
 
-  // if (res.status === 200) {
-  //   console.log("Login successful:", res.data);
-  //   dispatch(setToken({ token: res.data.accessToken }));
-
-  //   // פענוח הטוקן החדש
-  //   const newDecoded = jwtDecode(res.data.accessToken);
-  //   console.log("New Decoded token:", newDecoded);
-
-  //   if (newDecoded.roles === "Broker") {
-  //       navigate(`/MyApartments`);
-  //   } else if (newDecoded.roles === "Buyer" || newDecoded.roles === "Seller") {
-  //       navigate(`/Apartments`);
-  //       setVisible(false);
-  //   }
-
-  const token = useSelector((state) => state.token.token)
-  const newDecoded=jwtDecode(token)
-//   let decoded = null;
-
-// if (token && typeof token === 'string') {
-//     try {
-//         decoded = jwtDecode(token);
-//     } catch (error) {
-//         console.error("Error decoding token:", error.message);
-//     }
-// } else {
-//     console.error("Invalid or missing token.");
-// }
-  // const {user} = useSelector(state => state.token);
 
   const handleLogout = () => {
     dispatch(logOut());  // הסרת הטוקן מה-Redux
@@ -90,19 +67,19 @@ function App() {
   // פריטי התפריט
   const items = [
     {
-      label: token ? 'יציאה' : 'כניסה',  // אם יש טוקן, "Logout", אחרת "Sign In"
-      icon: token ? 'pi pi-sign-out' : 'pi pi-user',  // אם יש טוקן, "Logout" אייקון, אחרת "Sign In"
-      command: token ? handleLogout : () => navigate('./signin')  // אם יש טוקן, יבוצע Logout אחרת ינווט ל-Sign In
+      label: accesstoken ? 'יציאה' : 'כניסה',  // אם יש טוקן, "Logout", אחרת "Sign In"
+      icon: accesstoken ? 'pi pi-sign-out' : 'pi pi-user',  // אם יש טוקן, "Logout" אייקון, אחרת "Sign In"
+      command: accesstoken ? handleLogout : () => navigate('./signin')  // אם יש טוקן, יבוצע Logout אחרת ינווט ל-Sign In
     },
     {
       label: 'הרשמה',
       icon: 'pi pi-user-plus',
-      command: token ? handleLogout : () => navigate('./register')
+      command: accesstoken ? handleLogout : () => navigate('./register')
     }
   ];
   const end = (
     <div className="flex align-items-center gap-2">
-      {newDecoded && newDecoded.name ? <a><b>שלום  {newDecoded.name}</b></a> : <></>}
+      {decoded && decoded.name ? <a><b>שלום  {decoded.name}</b></a> : <></>}
     </div>
   );
 

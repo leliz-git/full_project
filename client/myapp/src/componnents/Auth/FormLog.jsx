@@ -68,10 +68,11 @@ const FormLog = (props) => {
     
             if (res.status === 200) {
                 console.log("Login successful:", res.data);
+                const token= res.data.accessToken
                 dispatch(setToken({ token: res.data.accessToken }));
     
                 // פענוח הטוקן החדש
-                const newDecoded = jwtDecode(res.data.accessToken);
+                const newDecoded = jwtDecode(token);
                 console.log("New Decoded token:", newDecoded);
     
                 if (newDecoded.roles === "Broker") {
