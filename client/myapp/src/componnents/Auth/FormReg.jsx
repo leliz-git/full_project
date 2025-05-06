@@ -9,12 +9,14 @@ import { classNames } from "primereact/utils";
 import { useNavigate } from "react-router-dom";
 import { setToken, logOut } from '../../redux/tokenSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import { jwtDecode } from 'jwt-decode';
 
 const FormReg = () => {
   const [formData, setFormData] = useState({});
   const accesstoken = useSelector((state) => state.token.token);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const decoded = accesstoken ? jwtDecode(accesstoken) : null;
 
   const defaultValues = {
     name: "",
@@ -37,8 +39,11 @@ const FormReg = () => {
 
       if (res.status === 201) {
         setFormData(data);
-        dispatch(setToken(res.data.accessToken));
-        alert("ההרשמה בוצעה בהצלחה!");
+        dispatch(setToken({
+          token: res.data.accessToken, // הטוקן שנשלח מהשרת
+          //user: res.data.user, // פרטי המשתמש שנשלחו מהשרת
+      }))
+        // alert("ההרשמה בוצעה בהצלחה!");
         navigate("/Apartments");
       }
     } catch (e) {
@@ -220,28 +225,7 @@ const FormReg = () => {
             </span>
             {getFormErrorMessage("password")}
           </div>
-          <div
-            className="field-checkbox"
-            style={{ marginBottom: "20px", display: "flex", alignItems: "center", justifyContent: "flex-end" }}
-          >
-            <Controller
-              name="accept"
-              control={control}
-              rules={{ required: true }}
-              render={({ field, fieldState }) => (
-                <Checkbox
-                  inputId={field.name}
-                  onChange={(e) => field.onChange(e.checked)}
-                  checked={field.value}
-                  className={classNames({ "p-invalid": fieldState.invalid })}
-                  style={{ marginLeft: "10px" }}
-                />
-              )}
-            />
-            <label htmlFor="accept" className={classNames({ "p-error": errors.accept })}>
-              אני מסכים לתנאים ולהגבלות*
-            </label>
-          </div>
+        
           <Button
             type="submit"
             label="הרשמה"

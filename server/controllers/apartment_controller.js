@@ -62,7 +62,7 @@ const CompleteApartment = async (req, res) => {
 
 const updateApartment = async (req, res) => {
     // const { _id } = req.params
-    const { _id, monopolism, neighborhood, number_of_rooms, floor, price, yad2, description, images, broker_bool, bought } = req.body
+    const { _id, monopolism, neighborhood, number_of_rooms, floor, price, yad2, description, images, broker_bool } = req.body
 
     if (!_id) {
         // console.log("!")
@@ -83,8 +83,7 @@ const updateApartment = async (req, res) => {
     apartment.yad2 = yad2
     apartment.description = description
     apartment.images = images
-    apartment.broker_bool = broker_bool
-    apartment.bought = bought
+    apartment.broker_bool = broker_bool || apartment.broker_bool
     const updateApartment = await apartment.save()
     const apartments = await Apartment.find().lean()
     res.json(apartments)

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import io from "socket.io-client";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom"; // ייבוא useNavigate
+import { jwtDecode } from 'jwt-decode';
+
 
 const createSocketWithUsername = (username) => {
   return io("http://localhost:7002", {
@@ -10,8 +12,10 @@ const createSocketWithUsername = (username) => {
 };
 
 const Chat = () => {
-  const user = useSelector((state) => state.token.user); // שליפת פרטי המשתמש מ-Redux
-  const username = user?.name || "משתמש לא מזוהה"; // שימוש בשם המשתמש או ערך ברירת מחדל
+  // const user = useSelector((state) => state.token.user); // שליפת פרטי המשתמש מ-Redux
+  const accesstoken = useSelector((state) => state.token.token);
+  const decoded = accesstoken ? jwtDecode(accesstoken) : null;
+  const username = decoded.name || "משתמש לא מזוהה"; // שימוש בשם המשתמש או ערך ברירת מחדל
   const [socket, setSocket] = useState(null); // שמירת החיבור ל-Socket
   const [message, setMessage] = useState(""); // הודעה חדשה
   const [chatLog, setChatLog] = useState([]); // רשימת ההודעות

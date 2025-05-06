@@ -17,6 +17,8 @@ import { setToken, logOut } from '../../redux/tokenSlice'
 import { Toast } from 'primereact/toast';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
+
 
         
 
@@ -31,6 +33,10 @@ const FormLog = (props) => {
     const dispatch = useDispatch();
     const navigate = useNavigate()
     const toastTopCenter = useRef(null);
+    const decoded = accesstoken ? jwtDecode(accesstoken) : null;
+
+
+
 
     const showMessage1 = (event, ref, severity) => {
         const label = event.target.innerText;
@@ -68,22 +74,24 @@ const FormLog = (props) => {
             )
             if (res.status === 200) {
                 console.log(res.data);
-                dispatch(setToken({token:res.data.accessToken,user:res.data.user}))
+                dispatch(setToken({token:res.data.accessToken}))
                 console.log(res.data.accessToken);
                 setFormData(data);
                 setShowMessage(true);
                 console.log(res);
-                setUser(res.data.user);  
+                // setUser(res.data.user);  
                 
                 
                 // navigate(`/Apartments/${userId}`)///////
-                if(res.data.user.roles==="Broker")
+                if(decoded.roles==="Broker")
                 {
                     navigate(`/MyApartments`)
                 }
-                else if(res.data.user.roles==="Buyer" || res.data.user.roles==="Seller")
+                else if(decoded.roles==="Buyer" || decoded.roles==="Seller")
                 {
+                <Alert msg={"שלום"}></Alert>
                     navigate(`/Apartments`)
+                    
                     // alert("Hi user")
                     setVisible(false)
                 }
@@ -92,8 +100,8 @@ const FormLog = (props) => {
                 
             }
         } catch (e) {
-            <Alert></Alert>
-            alert("לא מורשה")
+            <Alert msg={"לא מורשה"}></Alert>
+            // alert("לא מורשה")
             console.error(e)
             
         }
@@ -117,17 +125,7 @@ useEffect(()=>{
         
         
         <div className="form-demo">
-            {/* <Dialog visible={showMessage} onHide={() => setShowMessage(false)} position="top" footer={dialogFooter} showHeader={false} breakpoints={{ '960px': '80vw' }} style={{ height:'13vw',width: '20vw'}} >
-                <div className="flex justify-content-center flex-column pt-6 px-3">
-                    <i className="pi pi-check-circle" style={{ fontSize: '2rem', color: 'var(--green-500)' }}></i>
-                    <h5>Sign in </h5>
-                    <p style={{ lineHeight: 1.5, textIndent: '1rem' }}>
-                        Hi user <span></span>   
-                         <b>{user.name}</b> 
-                    </p>
-                </div>
-                
-            </Dialog> */}
+           
 
             <Dialog header="כניסה" visible={visible} style={{  height: '20vw', width: '20vw', margin: '0', marginTop:'0', padding: '0'}} 
             onHide={() => {if (!visible) return; setVisible(false);navigate(`/`) }}>

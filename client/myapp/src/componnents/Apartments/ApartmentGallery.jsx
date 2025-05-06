@@ -59,7 +59,7 @@ const ApartmentGallery = () => {
         };
 
         fetchApartments();
-    }, [accesstoken]);
+    }, [accesstoken, filteredApartments]);
 
     const formatCurrency = (value) => {
         const rounded = Math.round(value);

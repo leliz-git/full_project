@@ -38,10 +38,6 @@ const apartmentSchema = new mongoose.Schema({
         type: Boolean,
         default:true
     },
-    bought:{
-        type:Boolean,
-        default:false
-    },
     images:{
         // type:String
         type: [String], // מערך של מחרוזות

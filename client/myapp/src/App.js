@@ -20,6 +20,7 @@ import Rec_AddApartment from './componnents/Recourses/Rec_AddApartment';
 import GalleryApartment from './componnents/Broker/GalleryApartment';
 import{setToken,logOut}from './redux/tokenSlice';
 import Chat from './componnents/Chat/chat'
+import { jwtDecode } from 'jwt-decode';
 
 const LazyAuth = React.lazy(() => import('./componnents/Auth/Auth'))
 const LazyFormDemo = React.lazy(() => import('./componnents/Auth/FormReg'))
@@ -38,10 +39,13 @@ function App() {
     const [visible1, setVisible1] = useState(false)
     const [visible2, setVisible2] = useState(false)
     const dispatch = useDispatch();
- 
+    const accesstoken=useSelector((state)=>state.token.token)
+
+    const decoded = accesstoken ? jwtDecode(accesstoken) : null;
+
     // מצב הלוגין נשמר ב-Redux, בודק אם יש טוקן
     const {token} = useSelector(state => state.token);
-    const {user} = useSelector(state => state.token);
+    // const {user} = useSelector(state => state.token);
 
     const handleLogout = () => {
       dispatch(logOut());  // הסרת הטוקן מה-Redux
@@ -57,12 +61,12 @@ function App() {
       {
         label: 'הרשמה',
         icon: 'pi pi-user-plus',
-        command: () => navigate('./register')
+        command: token ? handleLogout :() => navigate('./register')
       }
     ];
     const end = (
       <div className="flex align-items-center gap-2">
-              {user?.name?<a><b>שלום</b>  {user?.name}</a>:<></>}      
+              {decoded?.name?<a><b>שלום</b>  {decoded.name}</a>:<></>}      
       </div>
   );
   

@@ -36,15 +36,15 @@ const Rec_AddApartment = (props) => {
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [images, setImages] = useState([]);
     const accesstoken = useSelector((state) => state.token.token);
-    const user = useSelector((state) => state.token.user);
+    // const user = useSelector((state) => state.token.user);
     const decoded = accesstoken ? jwtDecode(accesstoken) : null;
     const [formData, setFormData] = useState({});
     const neighborhoodsData = [
-        'רמות',
-        'סנהדריה',
-        'הר נוף',
+        'רמת אשכול',
+        'סנהדריה המורחבת',
+        'בר אילן',
         'רוממה',
-        'רמת שלמה'
+        'גבעת משה'
     ]
     const toast = useRef(null);
 
@@ -84,6 +84,25 @@ const Rec_AddApartment = (props) => {
 
     const { control, formState: { errors }, handleSubmit, reset } = useForm({ defaultValues });
 
+    const updateRole = async () => {
+        try {
+            const res = await axios({
+                method: 'PUT',
+                url: `http://localhost:7002/api/users/updateRole`,
+                headers: { Authorization: "Bearer " + accesstoken },
+                data: { _id: decoded?._id }
+            });
+
+            if (res.status === 200) {
+                console.log(res);
+                // alert("change role")
+            }
+        } catch (error) {
+            alert("אופס, שגיאה לא צפויה. נסה שוב בעוד מספר רגעים")
+            console.error(error);
+        }
+    };
+
     const onSubmit = async (data) => {
         const payload = {
             ...data,
@@ -113,19 +132,22 @@ const Rec_AddApartment = (props) => {
             )
 
             if (res.status === 200) {
-               
-               if(user.roles==="Broker")
+                await updateRole()
+               if(decoded.roles==="Broker")
                {
                 const apartments=res.data.filter(apartment=>apartment.broker_bool===false)
                 props.setApartments(apartments);
                 setShowMessage(true)
                }
-               else if (user.roles==="Seller" || user.roles==="Buyer")
+               else if (decoded.roles==="Seller" || decoded.roles==="Buyer")
                {
                 const apartments=res.data.filter(apartment=>apartment.broker_bool===true)
                 props.setApartments(apartments);
                 setShowMessage(true)
                }
+
+             
+        
                 
                 //  props.setVisible(false);
             }

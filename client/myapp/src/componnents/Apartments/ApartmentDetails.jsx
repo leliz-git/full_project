@@ -165,7 +165,7 @@ const ApartmentDetails = () => {
                 {/* Button to Navigate to Chat */}
                 <div className="text-center mt-4">
                     <Button
-                        label="שלח הודעה למתווך"
+                        label=" צ'אט עם המתווך 💬 "
                         className="p-button-primary"
                         style={{
                             fontSize: '1.2rem',

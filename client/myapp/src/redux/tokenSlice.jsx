@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 const i={
 token:null,
-user:{}
+user:null
 }
 const tokenSlice = createSlice({
     name: 'token',
@@ -9,7 +9,7 @@ const tokenSlice = createSlice({
     reducers: {
         setToken(state, action) {
             console.log("rrrrrrr",action);
-            state.user = action.payload.user
+            // state.user = action.payload.user
 console.log();
 
             state.token = action.payload.token
@@ -17,7 +17,7 @@ console.log();
         },
         logOut(state, action) {
             state.token = null;
-            state.user = null;
+            // state.user = null;
 
         }
     }

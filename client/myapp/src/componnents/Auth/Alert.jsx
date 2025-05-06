@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import { Button } from 'primereact/button';
 import { Toast } from 'primereact/toast';
 
-export default function PositionDemo() {
+const Alert=(props)=> {
     const toastTopCenter = useRef(null);
   
 
@@ -23,3 +23,5 @@ export default function PositionDemo() {
         </div>
     )
 }
+
+export default Alert

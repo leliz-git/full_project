@@ -75,10 +75,10 @@ app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/recourse", require("./routes/recourse_router"));
 
 mongoose.connection.once("open", () => {
-  console.log("✔ מחובר ל-MongoDB");
-  server.listen(PORT, () => console.log(`🚀 השרת פועל על פורט ${PORT}`));
+  console.log("connect to MongoDB");
+  server.listen(PORT, () => console.log(`server is running on port ${PORT}`));
 });
 
 mongoose.connection.on("error", (err) => {
-  console.error("שגיאת MongoDB:", err);
+  console.error("error MongoDB:", err);
 });

@@ -19,7 +19,7 @@ const login = async (req, res) => {
         roles: foundUser.roles, username: foundUser.username
     }
     const accessToken = jwt.sign(userInfo,process.env.ACCESS_TOKEN_SECRET)
-    res.json({ accessToken: accessToken, user:userInfo })
+    res.json({ accessToken: accessToken })
 }
 
 const register = async (req, res) => {
@@ -60,7 +60,7 @@ const register = async (req, res) => {
             username: user.username,
         };
         const accessToken = jwt.sign(userInfo, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
-        return res.status(201).json({ accessToken: accessToken, user: userInfo });
+        return res.status(201).json({ accessToken: accessToken });
     } else {
         return res.status(500).json({ message: 'Invalid user received' });
     }

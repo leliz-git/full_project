@@ -23,11 +23,33 @@ const updateUser = async (req, res) => {
         }
     }
 
-    user.name = name
+    user.name = name 
     user.username = username
     user.email = email
     user.phone = phone
     user.password = hashedPwd
+    const updatedUser = await user.save()
+    const users = await User.find().lean()
+    res.json(users)
+}
+
+const updateRole = async (req, res) => {
+    const { _id} = req.body
+    
+    // const hashedPwd = await bcrypt.hash(password, 10)
+    // await getUserById(_id)
+
+    if (!_id) {
+        return res.status(400).json({ message: 'id is required' })
+    }
+    const user = await User.findById(_id).exec()
+    if (!user) {
+        return res.status(400).json({ message: 'User not found1' })
+    }
+   
+   
+
+   user.roles="Seller"
     const updatedUser = await user.save()
     const users = await User.find().lean()
     res.json(users)
@@ -66,4 +88,4 @@ const getAllUsers = async (req, res) => {
     res.json(users)
 }
 
-module.exports = { updateUser, deleteUser, getUserById, getAllUsers }
+module.exports = { updateUser, deleteUser, getUserById, getAllUsers, updateRole }

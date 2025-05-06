@@ -9,6 +9,8 @@ router.get("/getAllUsers",brokerJWT,verifyJWT, Usercontroller.getAllUsers)
 // router.post("/add", Usercontroller.createNewUser)
 router.get("/getbyid/:id",verifyJWT, Usercontroller.getUserById)
 router.put("/update",verifyJWT, Usercontroller.updateUser)
+router.put("/updateRole",verifyJWT, Usercontroller.updateRole)
+
 router.delete("/delete",verifyJWT, Usercontroller.deleteUser)
 
 module.exports = router
