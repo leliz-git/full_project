@@ -72,7 +72,7 @@ app.use(express.static("public"));
 app.use("/api/users", require("./routes/user_router"));
 app.use("/api/apartments", require("./routes/apartment_router"));
 app.use("/api/auth", require("./routes/authRoutes"));
-app.use("/api/recourse", require("./routes/recourse_router"));
+
 
 mongoose.connection.once("open", () => {
   console.log("connect to MongoDB");

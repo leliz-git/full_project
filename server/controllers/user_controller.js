@@ -1,5 +1,7 @@
 const User = require("../models/Users")
 const bcrypt= require('bcrypt')
+const jwt = require('jsonwebtoken')
+
 
 
 const updateUser = async (req, res) => {
@@ -41,16 +43,29 @@ const updateUser = async (req, res) => {
         // שמירת המשתמש המעודכן
         const updatedUser = await user.save();
 
+        // ✅ יצירת טוקן חדש עם הפרטים המעודכנים
+        const token = jwt.sign(
+            {
+                id: updatedUser._id,
+                name: updatedUser.name,
+                username: updatedUser.username,
+                email: updatedUser.email
+            },
+            process.env.ACCESS_TOKEN_SECRET,
+            { expiresIn: '1h' }
+        );
+
         // שליפת כל המשתמשים לאחר העדכון
         const users = await User.find().lean();
-        return res.json(users);
+
+        // ✅ מחזיר גם את רשימת המשתמשים וגם את הטוקן החדש
+        return res.json({ users, token });
 
     } catch (error) {
         console.error('Error updating user:', error);
         return res.status(500).json({ message: 'Internal server error' });
     }
 };
-
 
 const updateRole = async (req, res) => {
     const { _id} = req.body
