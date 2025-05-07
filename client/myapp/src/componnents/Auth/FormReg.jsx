@@ -16,7 +16,7 @@ const FormReg = () => {
   const accesstoken = useSelector((state) => state.token.token);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const decoded = accesstoken ? jwtDecode(accesstoken) : null;
+  // const decoded = accesstoken?.token ? jwtDecode(accesstoken.token) : null;
 
   const defaultValues = {
     name: "",
@@ -39,10 +39,8 @@ const FormReg = () => {
 
       if (res.status === 201) {
         setFormData(data);
-        dispatch(setToken({
-          token: res.data.accessToken, // הטוקן שנשלח מהשרת
-          //user: res.data.user, // פרטי המשתמש שנשלחו מהשרת
-      }))
+        const token = res.data.accessToken;
+        dispatch(setToken({ token: res.data.accessToken }));
         // alert("ההרשמה בוצעה בהצלחה!");
         navigate("/Apartments");
       }

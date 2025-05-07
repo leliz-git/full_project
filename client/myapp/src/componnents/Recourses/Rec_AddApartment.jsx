@@ -37,8 +37,10 @@ const Rec_AddApartment = (props) => {
     const [images, setImages] = useState([]);
     const accesstoken = useSelector((state) => state.token.token);
     // const user = useSelector((state) => state.token.user);
-    const decoded = accesstoken ? jwtDecode(accesstoken) : null;
+    const decoded = accesstoken.token ? jwtDecode(accesstoken.token) : null;
     const [formData, setFormData] = useState({});
+        const toastTopCenter = useRef(null);
+    
     const neighborhoodsData = [
         'רמת אשכול',
         'סנהדריה המורחבת',
@@ -80,7 +82,9 @@ const Rec_AddApartment = (props) => {
         yad2: false,
         description: ''
     })
+    
 
+   
 
     const { control, formState: { errors }, handleSubmit, reset } = useForm({ defaultValues });
 
@@ -89,7 +93,7 @@ const Rec_AddApartment = (props) => {
             const res = await axios({
                 method: 'PUT',
                 url: `http://localhost:7002/api/users/updateRole`,
-                headers: { Authorization: "Bearer " + accesstoken },
+                headers: { Authorization: "Bearer " + accesstoken?.token },
                 data: { _id: decoded?._id }
             });
 
@@ -102,6 +106,8 @@ const Rec_AddApartment = (props) => {
             console.error(error);
         }
     };
+
+
 
     const onSubmit = async (data) => {
         const payload = {
@@ -116,7 +122,7 @@ const Rec_AddApartment = (props) => {
                 {
                     method: 'POST',
                     url: 'http://localhost:7002/api/apartments/add',
-                    headers: { Authorization: "Bearer " + accesstoken },
+                    headers: { Authorization: "Bearer " + accesstoken?.token },
                     data: {
                         images: images,
                         monopolism: data.monopolism,

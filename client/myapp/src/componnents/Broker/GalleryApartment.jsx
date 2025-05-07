@@ -57,7 +57,7 @@ const GalleryApartment = () => {
             const res = await axios({
                 method: 'delete',
                 url: `http://localhost:7002/api/apartments/delete`,
-                headers: { Authorization: "Bearer " + accesstoken },
+                headers: { Authorization: "Bearer " + accesstoken.token },
                 data: { _id: Apartment._id }
             });
 
@@ -67,7 +67,10 @@ const GalleryApartment = () => {
                 setDeleteApartmentDialog(true);
             }
         } catch (error) {
-            console.error(error);
+            if(error.response===400)
+                console.log("no apartment founds")
+            else
+                console.error(error);
         }
     };
 
@@ -76,7 +79,7 @@ const GalleryApartment = () => {
             const res = await axios({
                 method: 'PUT',
                 url: `http://localhost:7002/api/apartments/complete`,
-                headers: { Authorization: "Bearer " + accesstoken },
+                headers: { Authorization: "Bearer " + accesstoken.token },
                 data: { _id: Apartment._id }
             });
 
@@ -147,7 +150,7 @@ const GalleryApartment = () => {
                 const response = await axios({
                     method: 'GET',
                     url: 'http://localhost:7002/api/apartments/getAllApartmentsByBroker',
-                    headers: { Authorization: "Bearer " + accesstoken },
+                    headers: { Authorization: "Bearer " + accesstoken.token },
                 });
 
                 setApartments(response.data);

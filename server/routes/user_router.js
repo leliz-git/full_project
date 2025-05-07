@@ -5,7 +5,7 @@ const router = express.Router()
 const Usercontroller= require("../controllers/user_controller");
 // router.use(verifyJWT)
 
-router.get("/getAllUsers",brokerJWT,verifyJWT, Usercontroller.getAllUsers)
+router.get("/getAllUsers",verifyJWT,brokerJWT, Usercontroller.getAllUsers)
 // router.post("/add", Usercontroller.createNewUser)
 router.get("/getbyid/:id",verifyJWT, Usercontroller.getUserById)
 router.put("/update",verifyJWT, Usercontroller.updateUser)

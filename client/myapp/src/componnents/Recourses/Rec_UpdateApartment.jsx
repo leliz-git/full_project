@@ -20,7 +20,7 @@ const Rec_UpdateApartment = (props) => {
     const [selectedNeighborhood, setSelectedNeighborhood] = useState(null);
 
     const accesstoken = useSelector((state) => state.token.token);
-    const decoded = accesstoken ? jwtDecode(accesstoken) : null;
+    const decoded = accesstoken.token ? jwtDecode(accesstoken.token) : null;
 
     const neighborhoodsData = [
         'רמת אשכול',
@@ -68,7 +68,7 @@ const Rec_UpdateApartment = (props) => {
             const res = await axios({
                 method: 'PUT',
                 url: `http://localhost:7002/api/apartments/update`,
-                headers: { Authorization: "Bearer " + accesstoken },
+                headers: { Authorization: "Bearer " + accesstoken.token },
                 data: {
                     _id: props.apartment._id,
                     images: imagePreview,

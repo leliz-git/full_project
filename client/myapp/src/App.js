@@ -30,6 +30,7 @@ const LazyRecourse = React.lazy(() => import('./componnents/Recourses/Rec_AddApa
 const LazyApartments = React.lazy(() => import('./componnents/Broker/GalleryApartment'))
 const LazyApartmentsGalery = React.lazy(() => import('./componnents/Apartments/ApartmentGallery'))
 const LazyApartmentsDetails = React.lazy(() => import('./componnents/Apartments/ApartmentDetails'))
+const LazyUsers = React.lazy(() => import('./componnents/Users/AllUsers'))
 
 
 
@@ -40,17 +41,13 @@ function App() {
   const [visible2, setVisible2] = useState(false)
   const dispatch = useDispatch();
 
-
-
-
- 
   const accesstoken=useSelector((state)=>state.token.token)
 console.log(accesstoken)
 let decoded = null;
 
-if (accesstoken.token && typeof accesstoken.token === 'string') {
+if (accesstoken?.token && typeof accesstoken?.token === 'string') {
     try {
-        decoded = jwtDecode(accesstoken.token);
+        decoded = jwtDecode(accesstoken?.token);
         console.log("Decoded token:", decoded);
     } catch (error) {
         console.error("Error decoding token:", error.message);
@@ -64,8 +61,19 @@ if (accesstoken.token && typeof accesstoken.token === 'string') {
     dispatch(logOut());  // הסרת הטוקן מה-Redux
     navigate('/');  // ניווט לעמוד ה-signin לאחר התנתקות
   };
+  // console.log(decoded?.roles? decoded.roles :"no")
   // פריטי התפריט
   const items = [
+    {
+      label: decoded?.roles && decoded.roles==="Broker" ? 'דירות' : "",  // אם יש טוקן, "Logout", אחרת "Sign In"
+      icon: decoded?.roles && decoded.roles==="Broker" ? 'pi pi-home' : "",  // אם יש טוקן, "Logout" אייקון, אחרת "Sign In"
+      command: decoded?.roles && decoded.roles==="Broker" ? () => navigate('./MyApartments') : "" // אם יש טוקן, יבוצע Logout אחרת ינווט ל-Sign In
+    },
+    {
+      label: decoded?.roles && decoded.roles==="Broker" ? 'משתמשים' : "",  // אם יש טוקן, "Logout", אחרת "Sign In"
+      icon: decoded?.roles && decoded.roles==="Broker" ? 'pi pi-user' : "",  // אם יש טוקן, "Logout" אייקון, אחרת "Sign In"
+      command: decoded?.roles && decoded.roles==="Broker" ? () => navigate('./Users') : "" // אם יש טוקן, יבוצע Logout אחרת ינווט ל-Sign In
+    },
     {
       label: accesstoken ? 'יציאה' : 'כניסה',  // אם יש טוקן, "Logout", אחרת "Sign In"
       icon: accesstoken ? 'pi pi-sign-out' : 'pi pi-user',  // אם יש טוקן, "Logout" אייקון, אחרת "Sign In"
@@ -100,6 +108,7 @@ if (accesstoken.token && typeof accesstoken.token === 'string') {
           <Route path="/add-apartment" element={<LazyRecourse />} />
           <Route path='/MyApartments' element={ <LazyApartments />} />
           <Route path='/Apartments' element={ <LazyApartmentsGalery />} />
+          <Route path='/Users' element={ <LazyUsers />} />
         </Routes>
       </Suspense>
       {/* </Router> */}

@@ -14,7 +14,7 @@ const createSocketWithUsername = (username) => {
 const Chat = () => {
   // const user = useSelector((state) => state.token.user); // שליפת פרטי המשתמש מ-Redux
   const accesstoken = useSelector((state) => state.token.token);
-  const decoded = accesstoken ? jwtDecode(accesstoken) : null;
+  const decoded = accesstoken?.token ? jwtDecode(accesstoken.token) : null;
   const username = decoded.name || "משתמש לא מזוהה"; // שימוש בשם המשתמש או ערך ברירת מחדל
   const [socket, setSocket] = useState(null); // שמירת החיבור ל-Socket
   const [message, setMessage] = useState(""); // הודעה חדשה
