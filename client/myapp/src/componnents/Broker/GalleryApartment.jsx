@@ -21,6 +21,8 @@ import Rec_UpdateApartment from '../Recourses/Rec_UpdateApartment';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { Menubar } from 'primereact/menubar';
+
 
 const GalleryApartment = () => {
     let emptyApartment = {
@@ -91,28 +93,37 @@ const GalleryApartment = () => {
             console.error(error);
         }
     };
+    const menuItems = [
+        {
+            label: 'פרסום',
+            icon: 'pi pi-plus',
+            command: () => openNew(),
+        },
+        {
+            label: 'יצוא',
+            icon: 'pi pi-upload',
+            command: () => exportCSV(),
+        }
+    ];
 
-    const leftToolbarTemplate = () => {
-        return (
-            <div className="flex flex-wrap gap-2">
-                <Button label="פרסום" icon="pi pi-plus" severity="success" onClick={openNew} />
-            </div>
-        );
-    };
 
-    const rightToolbarTemplate = () => {
-        return <Button label="יצוא" icon="pi pi-upload" className="p-button-help" onClick={exportCSV} />;
-    };
-
-    const header = (
-        <div className="flex flex-wrap gap-2 align-items-center justify-content-between">
-            <h4 className="m-0"></h4>
-            <IconField iconPosition="left">
-                <InputIcon className="pi pi-search" />
-                <InputText type="search" onInput={(e) => setGlobalFilter(e.target.value)} placeholder="חיפוש..." />
-            </IconField>
-        </div>
-    );
+   const header = (
+       <div className="flex flex-wrap gap-2 align-items-center justify-content-between w-full">
+          
+           <div className="flex gap-2 align-items-center">
+               <IconField iconPosition="left">
+                   <InputIcon className="pi pi-search" />
+                   <InputText
+                       type="search"
+                       onInput={(e) => setGlobalFilter(e.target.value)}
+                       placeholder="חיפוש..."
+                   />
+               </IconField>
+           </div>
+           <div className="flex gap-2 align-items-center">
+               <Menubar model={menuItems} className="p-0 border-none shadow-none" />
+           </div>
+       </div>)
 
     const priceBodyTemplate = (rowData) => {
         return rowData.price.toLocaleString('en-US', { style: 'currency', currency: 'ILS' });
@@ -133,6 +144,8 @@ const GalleryApartment = () => {
             </div>
         );
     };
+
+  
 
     const hideDialog = () => {
         setSubmitted(false);
@@ -182,9 +195,13 @@ const GalleryApartment = () => {
     };
     return (
         <div>
+            
+             
+             
             <Toast ref={toast} />
             <div className="card">
-                <Toolbar className="mb-4" left={leftToolbarTemplate} right={rightToolbarTemplate}></Toolbar>
+                {/* <Menubar model={menuItems} /> */}
+                {/* <Toolbar className="mb-4" left={leftToolbarTemplate} right={rightToolbarTemplate}></Toolbar> */}
                 <DataTable
                     ref={dt}
                     value={apartments}
@@ -197,15 +214,17 @@ const GalleryApartment = () => {
                     paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} Apartments"
                     globalFilter={globalFilter}
-                    header={header}
+                    header={header }
+                    className="text-right" // זה מיישר את כל התוכן לימין
+                    
                 >
-                    <Column selectionMode="multiple" exportable={false}></Column>
-                    <Column field="price" header="מחיר" body={priceBodyTemplate}></Column>
-                    <Column field="neighborhood" header="שכונה"></Column>
-                    <Column field="images" header="תמונות" body={imageBodyTemplate}></Column>
-                    <Column field="number_of_rooms" header="מספר חדרים"></Column>
-                    <Column field="floor" header="קומה"></Column>
-                    <Column field="description" header="תיאור"></Column>
+                    <Column selectionMode="multiple" exportable={false} style={{ textAlign: 'right' }}></Column>
+                    <Column field="price" header="מחיר" body={priceBodyTemplate}style={{ textAlign: 'right' }}></Column>
+                    <Column field="neighborhood" header="שכונה"style={{ textAlign: 'right' }}></Column>
+                    <Column field="images" header="תמונות" body={imageBodyTemplate}style={{ textAlign: 'right' }}></Column>
+                    <Column field="number_of_rooms" header="מספר חדרים"style={{ textAlign: 'right' }}></Column>
+                    <Column field="floor" header="קומה"style={{ textAlign: 'right' }}></Column>
+                    <Column field="description" header="תיאור"style={{ textAlign: 'right' }}></Column>
                     <Column
                         body={(rowData) => (
                             <React.Fragment>
@@ -230,14 +249,14 @@ const GalleryApartment = () => {
                                     className="mr-2"
                                     onClick={() => editApartment(rowData)}
                                 />
-                                <Button
+                                {/* <Button
                                     icon="pi pi-comments"
                                     rounded
                                     outlined
                                     className="mr-2"
                                     tooltip="פתח צ'אט"
                                     onClick={() => navigate(`/chat?apartmentId=${rowData._id}`)}
-                                />
+                                /> */}
                             </React.Fragment>
                         )}
                         exportable={false}

@@ -22,6 +22,7 @@ import Rec_UpdateApartment from '../Recourses/Rec_UpdateApartment';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { Menubar } from 'primereact/menubar';
 
 const AllUsers = () => {
 
@@ -38,19 +39,35 @@ const AllUsers = () => {
     const dt = useRef(null);
 
 
-    const rightToolbarTemplate = () => {
-        return <Button label="יצוא" icon="pi pi-upload" className="p-button-help" onClick={exportCSV} />;
-    };
+    
 
-    const header = (
-        <div className="flex flex-wrap gap-2 align-items-center justify-content-between">
-            <h4 className="m-0"></h4>
+
+    const menuItems = [
+        {
+            label: 'יצוא',
+            icon: 'pi pi-upload',
+            command: () => exportCSV(),
+        }
+    ];
+    
+const header = (
+    <div className="flex flex-wrap gap-2 align-items-center justify-content-between w-full">
+       
+        <div className="flex gap-2 align-items-center">
             <IconField iconPosition="left">
                 <InputIcon className="pi pi-search" />
-                <InputText type="search" onInput={(e) => setGlobalFilter(e.target.value)} placeholder="חיפוש..." />
+                <InputText
+                    type="search"
+                    onInput={(e) => setGlobalFilter(e.target.value)}
+                    placeholder="חיפוש..."
+                />
             </IconField>
         </div>
-    );
+        <div className="flex gap-2 align-items-center">
+            <Menubar model={menuItems} className="p-0 border-none shadow-none" />
+        </div>
+    </div>)
+
 
   
 
@@ -82,13 +99,15 @@ const AllUsers = () => {
             dt.current.exportCSV(); // ייצוא הנתונים בקובץ CSV
         }
     };
+
     
  
     return (
         <div>
             <Toast ref={toast} />
             <div className="card">
-                <Toolbar className="mb-4"  right={rightToolbarTemplate}></Toolbar>
+                {/* <Menubar model={menuItems}></Menubar> */}
+                {/* <Toolbar className="mb-4"  right={rightToolbarTemplate}></Toolbar> */}
                 <DataTable
                     ref={dt}
                     value={users}
@@ -99,27 +118,28 @@ const AllUsers = () => {
                     rows={10}
                     rowsPerPageOptions={[5, 10, 25]}
                     paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-                    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} Users"
+                    currentPageReportTemplate="מציג {first} עד {last} מתוך {totalRecords} משתמשים"
                     globalFilter={globalFilter}
                     header={header}
-                >
-                    <Column selectionMode="multiple" exportable={false}></Column>
-                    <Column field="name" header="שם" ></Column>
-                    <Column field="username" header="שם משתמש"></Column>
-                    <Column field="email" header="אימייל" ></Column>
-                    <Column field="roles" header="סוג" ></Column>
+                    className="text-right" // זה מיישר את כל התוכן לימין
+                    >
+                        <Column selectionMode="multiple" exportable={false} style={{ textAlign: 'right' }}></Column>
+                        <Column field="name" header="שם" style={{ textAlign: 'right' }}></Column>
+                        <Column field="username" header="שם משתמש" style={{ textAlign: 'right' }}></Column>
+                        <Column field="email" header="אימייל" style={{ textAlign: 'right' }}></Column>
+                        <Column field="roles" header="סוג" style={{ textAlign: 'right' }}></Column>
                     <Column
                         body={(rowData) => (
                             <React.Fragment>
                            
-                                {/* <Button
+                                <Button
                                     icon="pi pi-comments"
                                     rounded
                                     outlined
                                     className="mr-2"
                                     tooltip="פתח צ'אט"
                                     onClick={() => navigate(`/chat?userId=${rowData._id}`)}
-                                /> */}
+                                />
                             </React.Fragment>
                         )}
                         exportable={false}

@@ -7,7 +7,7 @@ const Usercontroller= require("../controllers/user_controller");
 
 router.get("/getAllUsers",verifyJWT,brokerJWT, Usercontroller.getAllUsers)
 // router.post("/add", Usercontroller.createNewUser)
-router.get("/getbyid/:id",verifyJWT, Usercontroller.getUserById)
+router.get("/getbyid/:_id",verifyJWT, Usercontroller.getUserById)
 router.put("/update",verifyJWT, Usercontroller.updateUser)
 router.put("/updateRole",verifyJWT, Usercontroller.updateRole)
 

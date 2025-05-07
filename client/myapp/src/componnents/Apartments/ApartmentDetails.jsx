@@ -16,7 +16,10 @@ const ApartmentDetails = () => {
     const fetchApartment = async () => {
         try {
             const response = await axios.get(`http://localhost:7002/api/apartments/getbyid/${_id}`);
-            setApartment(response.data);
+            if(response.status===200)
+                setApartment(response.data);
+            else{
+            }
         } catch (error) {
             console.error('Error fetching apartment details:', error);
         }

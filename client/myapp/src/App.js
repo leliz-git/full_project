@@ -31,6 +31,7 @@ const LazyApartments = React.lazy(() => import('./componnents/Broker/GalleryApar
 const LazyApartmentsGalery = React.lazy(() => import('./componnents/Apartments/ApartmentGallery'))
 const LazyApartmentsDetails = React.lazy(() => import('./componnents/Apartments/ApartmentDetails'))
 const LazyUsers = React.lazy(() => import('./componnents/Users/AllUsers'))
+const LazyPersonalArea = React.lazy(() => import('./componnents/Users/UserPersonalArea'))
 
 
 
@@ -65,14 +66,9 @@ if (accesstoken?.token && typeof accesstoken?.token === 'string') {
   // פריטי התפריט
   const items = [
     {
-      label: decoded?.roles && decoded.roles==="Broker" ? 'דירות' : "",  // אם יש טוקן, "Logout", אחרת "Sign In"
-      icon: decoded?.roles && decoded.roles==="Broker" ? 'pi pi-home' : "",  // אם יש טוקן, "Logout" אייקון, אחרת "Sign In"
-      command: decoded?.roles && decoded.roles==="Broker" ? () => navigate('./MyApartments') : "" // אם יש טוקן, יבוצע Logout אחרת ינווט ל-Sign In
-    },
-    {
-      label: decoded?.roles && decoded.roles==="Broker" ? 'משתמשים' : "",  // אם יש טוקן, "Logout", אחרת "Sign In"
-      icon: decoded?.roles && decoded.roles==="Broker" ? 'pi pi-user' : "",  // אם יש טוקן, "Logout" אייקון, אחרת "Sign In"
-      command: decoded?.roles && decoded.roles==="Broker" ? () => navigate('./Users') : "" // אם יש טוקן, יבוצע Logout אחרת ינווט ל-Sign In
+      label: accesstoken ? 'אזור אישי' : '',  // אם יש טוקן, "Logout", אחרת "Sign In"
+      icon: accesstoken ? 'pi pi-user' : '',  // אם יש טוקן, "Logout" אייקון, אחרת "Sign In"
+      command: accesstoken ? () => navigate('./User') :<></> // אם יש טוקן, יבוצע Logout אחרת ינווט ל-Sign In
     },
     {
       label: accesstoken ? 'יציאה' : 'כניסה',  // אם יש טוקן, "Logout", אחרת "Sign In"
@@ -83,9 +79,19 @@ if (accesstoken?.token && typeof accesstoken?.token === 'string') {
       label: 'הרשמה',
       icon: 'pi pi-user-plus',
       command: accesstoken ? handleLogout : () => navigate('./register')
+    },
+    {
+      label: decoded?.roles && decoded.roles==="Broker" ? 'דירות' : "",  // אם יש טוקן, "Logout", אחרת "Sign In"
+      icon: decoded?.roles && decoded.roles==="Broker" ? 'pi pi-home' : "",  // אם יש טוקן, "Logout" אייקון, אחרת "Sign In"
+      command: decoded?.roles && decoded.roles==="Broker" ? () => navigate('./MyApartments') : "" // אם יש טוקן, יבוצע Logout אחרת ינווט ל-Sign In
+    },
+    {
+      label: decoded?.roles && decoded.roles==="Broker" ? 'משתמשים' : "",  // אם יש טוקן, "Logout", אחרת "Sign In"
+      icon: decoded?.roles && decoded.roles==="Broker" ? 'pi pi-user' : "",  // אם יש טוקן, "Logout" אייקון, אחרת "Sign In"
+      command: decoded?.roles && decoded.roles==="Broker" ? () => navigate('./Users') : "" // אם יש טוקן, יבוצע Logout אחרת ינווט ל-Sign In
     }
   ];
-  const end = (
+  const start = (
     <div className="flex align-items-center gap-2">
       {decoded && decoded.name ? <a><b>שלום  {decoded.name}</b></a> : <></>}
     </div>
@@ -94,7 +100,7 @@ if (accesstoken?.token && typeof accesstoken?.token === 'string') {
   return (
     <div className="App">
 
-      <Menubar model={items} end={end} />
+      <Menubar model={items} start={start} />
       {/* <Chat></Chat> */}
 
       <Suspense fallback={<div>Loading...</div>}>
@@ -109,6 +115,9 @@ if (accesstoken?.token && typeof accesstoken?.token === 'string') {
           <Route path='/MyApartments' element={ <LazyApartments />} />
           <Route path='/Apartments' element={ <LazyApartmentsGalery />} />
           <Route path='/Users' element={ <LazyUsers />} />
+          <Route path='/User' element={ <LazyPersonalArea />} />
+
+          
         </Routes>
       </Suspense>
       {/* </Router> */}
