@@ -10,14 +10,14 @@ const updateUser = async (req, res) => {
 
         // בדיקה אם ה-ID קיים
         if (!_id) {
-            console.log("1");
+            // console.log("1");
             return res.status(400).json({ message: 'id is required' });
         }
 
         // שליפת המשתמש לפי ID
         const user = await User.findById(_id).exec();
         if (!user) {
-            console.log("2");
+            // console.log("2");
             return res.status(404).json({ message: 'User not found' });
         }
 
@@ -30,10 +30,10 @@ const updateUser = async (req, res) => {
         }
 
         // עדכון פרטי המשתמש
-        if (name) user.name = name;
-        if (username) user.username = username;
-        if (email) user.email = email;
-        if (phone) user.phone = phone;
+        user.name= name|| user.name
+        user.username= username|| user.username
+        user.email= email|| user.email
+        user.phone= phone|| user.phone
 
         // הצפנת סיסמה אם סופקה
         if (password) {
@@ -43,7 +43,7 @@ const updateUser = async (req, res) => {
         // שמירת המשתמש המעודכן
         const updatedUser = await user.save();
 
-        // ✅ יצירת טוקן חדש עם הפרטים המעודכנים
+        //  יצירת טוקן חדש עם הפרטים המעודכנים
         const token = jwt.sign(
             {
                 id: updatedUser._id,
@@ -58,7 +58,7 @@ const updateUser = async (req, res) => {
         // שליפת כל המשתמשים לאחר העדכון
         const users = await User.find().lean();
 
-        // ✅ מחזיר גם את רשימת המשתמשים וגם את הטוקן החדש
+        //  מחזיר גם את רשימת המשתמשים וגם את הטוקן החדש
         return res.json({ users, token });
 
     } catch (error) {
@@ -69,9 +69,6 @@ const updateUser = async (req, res) => {
 
 const updateRole = async (req, res) => {
     const { _id} = req.body
-    
-    // const hashedPwd = await bcrypt.hash(password, 10)
-    // await getUserById(_id)
 
     if (!_id) {
         return res.status(400).json({ message: 'id is required' })

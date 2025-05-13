@@ -12,9 +12,7 @@ const createNewApartment = async (req, res) => {
     if (!price) {
         return res.status(400).json({ message: 'price is required' })
     }
-    // if (!yad2) {
-    //     return res.status(400).json({ message: 'yad2 is required' })
-    // }
+   
 
     const apartment = await Apartment.create({ number_of_interested, seller_id, images, monopolism, neighborhood, number_of_rooms, floor, price, yad2, description })
     const apartments = await Apartment.find().lean()
@@ -40,28 +38,28 @@ const getAllApartment = async (req, res) => {
     res.json(apartments)
 
 }//שכל מי שנכנס לאתר יראה
+
 const CompleteApartment = async (req, res) => {
-    console.log("!!")
+   
     const { _id } = req.body
     if (!_id) {
-        // console.log("!")
+        
         return res.status(400).json({ message: 'id is required' })
     }
     const apartment = await Apartment.findById(_id).exec()
 
     if (!apartment) {
-        // console.log("?")
+        
         return res.status(400).json({ message: 'apartment not found' })
     }
     apartment.broker_bool = !apartment.broker_bool;
     const updateApartment = await apartment.save()
     const apartments = await Apartment.find().lean()
-    console.log("!")
     res.json(apartments)
 }
 
 const updateApartment = async (req, res) => {
-    // const { _id } = req.params
+    
     const { _id, monopolism, neighborhood, number_of_rooms, floor, price, yad2, description, images, broker_bool } = req.body
 
     if (!_id) {
@@ -89,23 +87,23 @@ const updateApartment = async (req, res) => {
     res.json(apartments)
 }
 
-const updateNumofIntrest = async (req, res) => {
-    // getApartmentById()
-    const { _id } = req.params
-    // const { _id } = req.body
-    const apartment = await Apartment.findById(_id).lean()
+// const updateNumofIntrest = async (req, res) => {
+//     // getApartmentById()
+//     const { _id } = req.params
+//     // const { _id } = req.body
+//     const apartment = await Apartment.findById(_id).lean()
 
-    if (!apartment) {
-        return res.status(400).json({ message: 'No apartment found' })
-    }
+//     if (!apartment) {
+//         return res.status(400).json({ message: 'No apartment found' })
+//     }
 
-    apartment.number_of_interested = apartment.number_of_interested + 1
+//     apartment.number_of_interested = apartment.number_of_interested + 1
 
-}
+// }
 
 const deleteApartment = async (req, res) => {
     const { _id } = req.body
-    // const { id } = req.params
+
     const apartment = await Apartment.findById(_id).exec()
 
     if (!apartment) {
@@ -116,12 +114,11 @@ const deleteApartment = async (req, res) => {
     res.json(apartments)
 }
 
-const getApartmentById = async (req, res) => {//לבדוק אם צריך middleware
+const getApartmentById = async (req, res) => {//גם משנה את מספר המתעניינים
 
-    // updateNumofIntrest(id)
-
+   
     const { _id } = req.params
-    // updateNumofIntrest(_id)
+   
     const apartment = await Apartment.findById(_id).exec()
     
     if (!apartment) {
@@ -134,5 +131,5 @@ const getApartmentById = async (req, res) => {//לבדוק אם צריך middlew
     res.json(apartment)
 }
 
-module.exports = { createNewApartment, getAllApartment, CompleteApartment, updateApartment, updateNumofIntrest, deleteApartment, getApartmentById, getAllApartmentByBroker }
+module.exports = { createNewApartment, getAllApartment, CompleteApartment, updateApartment, deleteApartment, getApartmentById, getAllApartmentByBroker }
 
